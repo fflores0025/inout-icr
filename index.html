@@ -5,16 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IRC — Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  
-  <!-- ✅ Aquí SÍ declaramos supabase (NO hay auth.js) -->
+
+  <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- UNA SOLA declaración de supabase, aquí en el head -->
   <script>
     const supabase = window.supabase.createClient(
       'https://raoxkjnwrccoxjcipfpv.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE0MzEwNDIsImV4cCI6MjA0NzAwNzA0Mn0.sb_publishable__-K1pC4bOJHRf8JQ__OOzg_jqLxlGla'
     );
   </script>
-  
+
   <style>
     :root {
       --a1: #c8ff00;
@@ -56,9 +57,7 @@
       opacity: 0.6;
       margin-bottom: 40px;
     }
-    .form-group {
-      margin-bottom: 24px;
-    }
+    .form-group { margin-bottom: 24px; }
     label {
       display: block;
       font-size: 14px;
@@ -82,9 +81,7 @@
       border-color: var(--a1);
       box-shadow: 0 0 0 3px rgba(200, 255, 0, 0.1);
     }
-    input::placeholder {
-      color: rgba(255, 255, 255, 0.3);
-    }
+    input::placeholder { color: rgba(255, 255, 255, 0.3); }
     .btn {
       width: 100%;
       background: var(--a1);
@@ -103,14 +100,7 @@
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(200, 255, 0, 0.3);
     }
-    .btn:active {
-      transform: translateY(0);
-    }
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .error {
       background: rgba(255, 60, 172, 0.1);
       border: 1px solid var(--a2);
@@ -121,22 +111,9 @@
       font-size: 14px;
       display: none;
     }
-    .loading {
-      display: none;
-      text-align: center;
-      margin-top: 16px;
-      opacity: 0.6;
-      font-size: 14px;
-    }
-    .loading.active {
-      display: block;
-    }
-    .footer {
-      text-align: center;
-      margin-top: 32px;
-      font-size: 12px;
-      opacity: 0.4;
-    }
+    .loading { display: none; text-align: center; margin-top: 16px; opacity: 0.6; font-size: 14px; }
+    .loading.active { display: block; }
+    .footer { text-align: center; margin-top: 32px; font-size: 12px; opacity: 0.4; }
   </style>
 </head>
 <body>
@@ -147,65 +124,36 @@
     <form id="loginForm">
       <div class="form-group">
         <label for="email">Email</label>
-        <input 
-          type="email" 
-          id="email" 
-          placeholder="tu@email.com" 
-          required 
-          autocomplete="email"
-        >
+        <input type="email" id="email" placeholder="tu@email.com" required autocomplete="email">
       </div>
-
       <div class="form-group">
         <label for="password">Contraseña</label>
-        <input 
-          type="password" 
-          id="password" 
-          placeholder="••••••••" 
-          required 
-          autocomplete="current-password"
-        >
+        <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
       </div>
-
-      <button type="submit" class="btn" id="loginBtn">
-        Iniciar sesión
-      </button>
-
-      <div class="loading" id="loading">
-        Verificando credenciales...
-      </div>
-
+      <button type="submit" class="btn" id="loginBtn">Iniciar sesión</button>
+      <div class="loading" id="loading">Verificando credenciales...</div>
       <div class="error" id="error"></div>
     </form>
 
-    <div class="footer">
-      InOut Media · Sistema Interno
-    </div>
+    <div class="footer">InOut Media · Sistema Interno</div>
   </div>
 
+  <!-- SIN segunda declaración de supabase aquí -->
   <script>
-    const supabase = window.supabase.createClient(
-      'https://raoxkjnwrccoxjcipfpv.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE0MzEwNDIsImV4cCI6MjA0NzAwNzA0Mn0.sb_publishable__-K1pC4bOJHRf8JQ__OOzg_jqLxlGla'
-    );
-
     const loginForm = document.getElementById('loginForm');
     const loginBtn = document.getElementById('loginBtn');
     const loading = document.getElementById('loading');
     const errorEl = document.getElementById('error');
 
-    // Verificar si ya hay sesión activa
     async function checkSession() {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        await verifyAndRedirect(session.user);
-      }
+      if (session) await verifyAndRedirect(session.user);
     }
     checkSession();
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
 
@@ -219,17 +167,9 @@
       errorEl.style.display = 'none';
 
       try {
-        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-          email,
-          password
-        });
-
-        if (authError) {
-          throw new Error('Email o contraseña incorrectos');
-        }
-
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password });
+        if (authError) throw new Error('Email o contraseña incorrectos');
         await verifyAndRedirect(authData.user);
-
       } catch (err) {
         showError(err.message);
         loginBtn.disabled = false;
@@ -239,26 +179,21 @@
 
     async function verifyAndRedirect(user) {
       try {
-        // Buscar empleado por auth_user_id
-        let { data: empleado, error: empError } = await supabase
+        let { data: empleado } = await supabase
           .from('empleados')
           .select('*')
           .eq('auth_user_id', user.id)
           .maybeSingle();
 
-        // Si no existe, buscar por email
         if (!empleado) {
-          const { data: empleadoByEmail } = await supabase
+          let { data: empleadoByEmail } = await supabase
             .from('empleados')
             .select('*')
             .eq('email', user.email)
             .maybeSingle();
 
-          if (!empleadoByEmail) {
-            throw new Error('Usuario no autorizado para IRC');
-          }
+          if (!empleadoByEmail) throw new Error('Usuario no autorizado para IRC');
 
-          // Actualizar auth_user_id
           await supabase
             .from('empleados')
             .update({ auth_user_id: user.id })
@@ -267,40 +202,17 @@
           empleado = empleadoByEmail;
         }
 
-        // Verificar acceso IRC (SuperAdmin SIEMPRE tiene acceso)
         if (!empleado.irc_rol && empleado.role !== 'superadmin') {
           await supabase.auth.signOut();
           throw new Error('No tienes acceso al sistema IRC');
         }
 
-        // Registrar historial
-        await supabase.from('irc.historial').insert({
-          tipo: 'login',
-          usuario_id: empleado.id,
-          detalles: { 
-            email: user.email,
-            timestamp: new Date().toISOString()
-          }
-        });
-
-        // Actualizar último acceso
-        await supabase
-          .from('empleados')
-          .update({ ultimo_acceso: new Date().toISOString() })
-          .eq('id', empleado.id);
-
-        // Guardar sesión local
         localStorage.setItem('irc_user_id', empleado.id);
         localStorage.setItem('irc_user_rol', empleado.irc_rol || empleado.role);
         localStorage.setItem('irc_user_nombre', `${empleado.nombre} ${empleado.apellido || ''}`);
         localStorage.setItem('irc_user_email', user.email);
 
-        // Redirigir
-        if (empleado.irc_rol === 'almacen') {
-          window.location.href = 'almacen.html';
-        } else {
-          window.location.href = 'escritorio.html';
-        }
+        window.location.href = empleado.irc_rol === 'almacen' ? 'almacen.html' : 'escritorio.html';
 
       } catch (err) {
         await supabase.auth.signOut();
@@ -313,9 +225,7 @@
     function showError(msg) {
       errorEl.textContent = msg;
       errorEl.style.display = 'block';
-      setTimeout(() => {
-        errorEl.style.display = 'none';
-      }, 5000);
+      setTimeout(() => errorEl.style.display = 'none', 5000);
     }
 
     document.getElementById('email').focus();
