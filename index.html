@@ -5,17 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IRC — Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <!-- Supabase SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- UNA SOLA declaración de supabase, aquí en el head -->
-  <script>
-    const supabase = window.supabase.createClient(
-      'https://raoxkjnwrccoxjcipfpv.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE0MzEwNDIsImV4cCI6MjA0NzAwNzA0Mn0.sb_publishable__-K1pC4bOJHRf8JQ__OOzg_jqLxlGla'
-    );
-  </script>
-
   <style>
     :root {
       --a1: #c8ff00;
@@ -96,10 +85,7 @@
       transition: all 0.2s;
       margin-top: 8px;
     }
-    .btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(200, 255, 0, 0.3);
-    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200, 255, 0, 0.3); }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
     .error {
       background: rgba(255, 60, 172, 0.1);
@@ -120,7 +106,6 @@
   <div class="login-container">
     <div class="logo">InOut Repair Center</div>
     <div class="subtitle">Sistema de gestión de reparaciones</div>
-
     <form id="loginForm">
       <div class="form-group">
         <label for="email">Email</label>
@@ -134,33 +119,35 @@
       <div class="loading" id="loading">Verificando credenciales...</div>
       <div class="error" id="error"></div>
     </form>
-
     <div class="footer">InOut Media · Sistema Interno</div>
   </div>
 
-  <!-- SIN segunda declaración de supabase aquí -->
+  <!-- SDK al final del body, ANTES del script de app -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const loginForm = document.getElementById('loginForm');
+    // UNA SOLA declaración aquí, después del SDK
+    const supabase = window.supabase.createClient(
+      'https://raoxkjnwrccoxjcipfpv.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE0MzEwNDIsImV4cCI6MjA0NzAwNzA0Mn0.sb_publishable__-K1pC4bOJHRf8JQ__OOzg_jqLxlGla'
+    );
+
     const loginBtn = document.getElementById('loginBtn');
     const loading = document.getElementById('loading');
     const errorEl = document.getElementById('error');
 
+    // Verificar sesión activa al cargar
     async function checkSession() {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) await verifyAndRedirect(session.user);
     }
     checkSession();
 
-    loginForm.addEventListener('submit', async (e) => {
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
 
-      if (!email || !password) {
-        showError('Por favor completa todos los campos');
-        return;
-      }
+      if (!email || !password) { showError('Por favor completa todos los campos'); return; }
 
       loginBtn.disabled = true;
       loading.classList.add('active');
@@ -186,20 +173,16 @@
           .maybeSingle();
 
         if (!empleado) {
-          let { data: empleadoByEmail } = await supabase
+          const { data: byEmail } = await supabase
             .from('empleados')
             .select('*')
             .eq('email', user.email)
             .maybeSingle();
 
-          if (!empleadoByEmail) throw new Error('Usuario no autorizado para IRC');
+          if (!byEmail) throw new Error('Usuario no autorizado para IRC');
 
-          await supabase
-            .from('empleados')
-            .update({ auth_user_id: user.id })
-            .eq('id', empleadoByEmail.id);
-
-          empleado = empleadoByEmail;
+          await supabase.from('empleados').update({ auth_user_id: user.id }).eq('id', byEmail.id);
+          empleado = byEmail;
         }
 
         if (!empleado.irc_rol && empleado.role !== 'superadmin') {
