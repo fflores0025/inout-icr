@@ -5,118 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IRC — Escritorio</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-  
-  <!-- ✅ PASO 1: Cargar Supabase SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
-  <!-- ✅ PASO 2: Inicializar cliente Supabase (inline script) -->
-  <script>
-    const supabase = window.supabase.createClient(
-      'https://raoxkjnwrccoxjcipfpv.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE0MzEwNDIsImV4cCI6MjA0NzAwNzA0Mn0.sb_publishable__-K1pC4bOJHRf8JQ__OOzg_jqLxlGla'
-    );
-  </script>
-  
-  <!-- ✅ PASO 3: Cargar auth guard (ahora supabase ya existe) -->
-  <script src="auth.js"></script>
-  
   <style>
-    :root {
-      --a1: #c8ff00;
-      --a2: #ff3cac;
-      --a3: #00d4ff;
-      --bg: #07070f;
-      --bg2: #0f0f1a;
-    }
+    :root { --a1: #c8ff00; --a2: #ff3cac; --a3: #00d4ff; --bg: #07070f; --bg2: #0f0f1a; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: white;
-      min-height: 100vh;
-      padding: 20px;
-    }
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 40px;
-      padding-bottom: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--a1);
-    }
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-    .user-name {
-      font-weight: 500;
-    }
-    .user-rol {
-      font-size: 12px;
-      opacity: 0.6;
-      text-transform: uppercase;
-      background: rgba(200, 255, 0, 0.1);
-      padding: 4px 8px;
-      border-radius: 4px;
-      color: var(--a1);
-    }
-    .btn-logout {
-      background: transparent;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.2s;
-      font-family: 'DM Sans', sans-serif;
-    }
-    .btn-logout:hover {
-      border-color: var(--a2);
-      color: var(--a2);
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
-    }
-    .card {
-      background: var(--bg2);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 32px;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none;
-      color: white;
-      display: block;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: var(--a1);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    }
-    .card-icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-    }
-    .card-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .card-desc {
-      font-size: 14px;
-      opacity: 0.6;
-    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: white; min-height: 100vh; padding: 20px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .logo { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--a1); }
+    .user-info { display: flex; align-items: center; gap: 16px; }
+    .user-name { font-weight: 500; }
+    .user-rol { font-size: 12px; background: rgba(200,255,0,0.1); padding: 4px 8px; border-radius: 4px; color: var(--a1); }
+    .btn-logout { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-family: 'DM Sans', sans-serif; }
+    .btn-logout:hover { border-color: var(--a2); color: var(--a2); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; }
+    .card { background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 32px; text-decoration: none; color: white; display: block; transition: all 0.2s; }
+    .card:hover { transform: translateY(-4px); border-color: var(--a1); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+    .card-icon { font-size: 48px; margin-bottom: 16px; }
+    .card-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+    .card-desc { font-size: 14px; opacity: 0.6; }
   </style>
 </head>
 <body>
@@ -137,19 +42,16 @@
       <div class="card-title">Nueva Reparación</div>
       <div class="card-desc">Iniciar proceso de diagnóstico y reparación</div>
     </a>
-
     <a href="pedidos.html" class="card">
       <div class="card-icon">📦</div>
       <div class="card-title">Mis Pedidos</div>
       <div class="card-desc">Ver pedidos de materiales activos</div>
     </a>
-
     <a href="reacondicionados.html" class="card">
       <div class="card-icon">♻️</div>
       <div class="card-title">Reacondicionados</div>
       <div class="card-desc">Gestionar piezas para reparar</div>
     </a>
-
     <a href="historial.html" class="card">
       <div class="card-icon">📊</div>
       <div class="card-title">Mi Historial</div>
@@ -157,20 +59,19 @@
     </a>
   </div>
 
+  <!-- Scripts AL FINAL del body -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const userName = localStorage.getItem('irc_user_nombre');
-    const userRol = localStorage.getItem('irc_user_rol');
-    
-    document.getElementById('userName').textContent = userName || 'Usuario';
-    
-    const rolDisplay = {
-      'superadmin': 'SuperAdmin',
-      'supervisor_irc': 'Supervisor',
-      'tecnico': 'Técnico',
-      'almacen': 'Almacén'
-    };
-    
-    document.getElementById('userRol').textContent = rolDisplay[userRol] || 'Técnico';
+    var supabase = window.supabase.createClient(
+      'https://raoxkjnwrccoxjcipfpv.supabase.co',
+      'PEGA_AQUI_TU_ANON_KEY_COMPLETA'
+    );
+  </script>
+  <script src="auth.js"></script>
+  <script>
+    const rolDisplay = { 'superadmin': 'SuperAdmin', 'supervisor_irc': 'Supervisor', 'tecnico': 'Técnico', 'almacen': 'Almacén' };
+    document.getElementById('userName').textContent = localStorage.getItem('irc_user_nombre') || 'Usuario';
+    document.getElementById('userRol').textContent = rolDisplay[localStorage.getItem('irc_user_rol')] || 'Técnico';
   </script>
 </body>
 </html>
