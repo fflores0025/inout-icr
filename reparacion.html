@@ -26,7 +26,6 @@
     .panel-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
     .panel-subtitle { font-size: 14px; opacity: 0.6; margin-bottom: 28px; }
 
-    /* CATEGORIAS */
     .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
     .cat-btn { background: var(--bg2); border: 2px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 20px 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
     .cat-btn:hover { border-color: var(--a1); transform: translateY(-2px); }
@@ -34,7 +33,6 @@
     .cat-icon { font-size: 32px; margin-bottom: 8px; }
     .cat-name { font-size: 13px; font-weight: 500; }
 
-    /* INPUT EQUIPO */
     .equipo-row { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
     .equipo-numero-wrap { position: relative; flex: 1; max-width: 300px; }
     .search-box { width: 100%; background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 16px; font-size: 15px; color: white; font-family: 'DM Sans', sans-serif; }
@@ -50,7 +48,6 @@
     .equipo-status.checking { color: rgba(255,255,255,0.5); }
     .equipo-status.error { color: var(--a2); }
 
-    /* DISPOSITIVO ENCONTRADO */
     .dispositivo-card { background: rgba(200,255,0,0.06); border: 2px solid var(--a1); border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; display: none; }
     .dispositivo-card.show { display: block; }
     .dispositivo-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
@@ -61,7 +58,26 @@
     .estado-baja { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
     .dispositivo-info { font-size: 13px; opacity: 0.7; }
 
-    /* DIAGNÓSTICO */
+    .nuevo-dispositivo-card { background: rgba(0,212,255,0.04); border: 2px solid rgba(0,212,255,0.3); border-radius: 10px; padding: 20px; margin-bottom: 16px; display: none; }
+    .nuevo-dispositivo-card.show { display: block; }
+    .nuevo-dispositivo-title { font-size: 15px; font-weight: 600; color: var(--a3); margin-bottom: 16px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-label { font-size: 12px; font-weight: 600; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-input { background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 14px; font-size: 14px; color: white; font-family: 'DM Sans', sans-serif; }
+    .form-input:focus { outline: none; border-color: var(--a3); }
+
+    .btn-primary { background: var(--a1); color: var(--bg); border: none; border-radius: 8px; padding: 14px 32px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200,255,0,0.3); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; padding: 14px 24px; font-size: 15px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .btn-custom { background: var(--a1); color: var(--bg); border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+    .btn-cyan { background: rgba(0,212,255,0.15); color: var(--a3); border: 1px solid rgba(0,212,255,0.3); border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .btn-cyan:hover { background: rgba(0,212,255,0.25); }
+    .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); border-radius: 8px; padding: 10px 18px; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: white; }
+
     .diag-section { margin-bottom: 24px; }
     .diag-section-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.5; margin-bottom: 12px; }
     .diag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
@@ -82,7 +98,6 @@
     .pieza-opt-icon { font-size: 24px; margin-bottom: 6px; }
     .pieza-opt-label { font-size: 13px; font-weight: 500; }
 
-    /* MATERIALES */
     .materiales-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
     .material-row { display: flex; align-items: center; gap: 12px; background: var(--bg2); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px 16px; }
     .material-nombre { flex: 1; font-size: 14px; }
@@ -103,7 +118,6 @@
     textarea:focus { outline: none; border-color: var(--a1); }
     textarea::placeholder { color: rgba(255,255,255,0.3); }
 
-    /* RESUMEN */
     .resumen-card { background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
     .resumen-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); gap: 16px; }
     .resumen-row:last-child { border-bottom: none; }
@@ -111,7 +125,6 @@
     .resumen-value { font-size: 14px; font-weight: 500; text-align: right; }
 
     .actions { display: flex; gap: 12px; margin-top: 8px; }
-
     .equipo-selected-box { background: rgba(200,255,0,0.06); border: 2px solid var(--a1); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
     .btn-change { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif; }
 
@@ -123,6 +136,10 @@
     .hidden { display: none !important; }
     .piezaRetiradaForm { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
     .piezaRetiradaForm .search-box { flex: 1; min-width: 200px; margin: 0; }
+
+    .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
+    .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+    .divider-text { font-size: 12px; opacity: 0.4; }
   </style>
 </head>
 <body>
@@ -154,7 +171,7 @@
       <div class="cat-btn" onclick="selectCat(this,'INOUT-LOCKER')"><div class="cat-icon">🔒</div><div class="cat-name">Locker</div></div>
       <div class="cat-btn" onclick="selectCat(this,'INOUT-IMPRESORA')"><div class="cat-icon">🖨️</div><div class="cat-name">Impresora</div></div>
       <div class="cat-btn" onclick="selectCat(this,'INOUT-RFID')"><div class="cat-icon">📶</div><div class="cat-name">RFID</div></div>
-      <div class="cat-btn" onclick="selectCat(this,'INOUT-CABLE')"><div class="cat-icon">🖧</div><div class="cat-name">CABLE</div></div>
+      <div class="cat-btn" onclick="selectCat(this,'INOUT-CABLE')"><div class="cat-icon">🖧</div><div class="cat-name">Cable</div></div>
       <div class="cat-btn" onclick="selectCat(this,'OTRO')"><div class="cat-icon">🔧</div><div class="cat-name">Otro</div></div>
     </div>
 
@@ -178,11 +195,9 @@
       <div class="dispositivo-info" id="dispositivoInfo">—</div>
     </div>
 
-    <!-- Dispositivo NO encontrado → crear nuevo -->
+    <!-- Dispositivo NO encontrado -->
     <div class="nuevo-dispositivo-card" id="nuevoDispositivoCard">
-      <div class="nuevo-dispositivo-title">
-        ✦ Dispositivo nuevo — Registrar en el sistema
-      </div>
+      <div class="nuevo-dispositivo-title">✦ Dispositivo nuevo — Registrar en el sistema</div>
       <div class="form-grid">
         <div class="form-group">
           <div class="form-label">Nombre descriptivo</div>
@@ -197,15 +212,33 @@
           <input type="text" class="form-input" id="nuevoNotas" placeholder="Información adicional sobre el dispositivo">
         </div>
       </div>
-      <div style="margin-top:14px; display:flex; gap:10px; align-items:center;">
+      <div style="margin-top:16px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
         <button class="btn-cyan" onclick="registrarYContinuar()">✓ Registrar y continuar</button>
-        <span style="font-size:13px; opacity:0.5;">o</span>
-        <button class="btn-back" style="font-size:13px;" onclick="continuarSinRegistrar()">Continuar sin registrar</button>
+        <button class="btn-ghost" onclick="continuarSinRegistrar()">Continuar sin registrar</button>
+        <button class="btn-ghost" onclick="irADispositivos()" style="margin-left:auto;">
+          Gestionar dispositivos →
+        </button>
       </div>
     </div>
 
     <div id="equipoError" style="color:var(--a2); font-size:13px; margin-top:8px; display:none;">
       Selecciona una categoría y un número de equipo
+    </div>
+
+    <!-- Acceso directo a dispositivos -->
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-text">gestión</span>
+      <div class="divider-line"></div>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between;">
+      <div>
+        <div style="font-size:14px; font-weight:500;">¿Quieres ver o registrar dispositivos?</div>
+        <div style="font-size:12px; opacity:0.4; margin-top:4px;">Inventario completo de equipos InOut</div>
+      </div>
+      <a href="dispositivos.html" class="btn-ghost" style="text-decoration:none;">
+        Ver dispositivos →
+      </a>
     </div>
   </div>
 
@@ -278,16 +311,12 @@
   <div class="panel" id="panel3">
     <div class="panel-title">Materiales necesarios</div>
     <div class="panel-subtitle">Añade los materiales que necesitas del almacén</div>
-
     <div id="sugerenciasBox" style="margin-bottom:20px;"></div>
-
     <div class="add-row">
       <input type="text" class="search-box" id="materialInput" placeholder="Añadir material..." style="margin:0;">
       <button class="btn-custom" onclick="addMaterial()">+ Añadir</button>
     </div>
-
     <div class="materiales-list" id="materialesList"></div>
-
     <div class="section-label" style="margin-bottom:10px;">Mesa de trabajo</div>
     <div class="mesa-selector">
       <div class="mesa-btn" onclick="selectMesa(this,'Mesa 01')">Mesa 01</div>
@@ -296,10 +325,8 @@
       <div class="mesa-btn" onclick="selectMesa(this,'Mesa 04')">Mesa 04</div>
       <div class="mesa-btn" onclick="selectMesa(this,'Mesa 05')">Mesa 05</div>
     </div>
-
     <div class="section-label" style="margin-bottom:10px;">Notas adicionales</div>
     <textarea id="notasReparacion" placeholder="Observaciones, instrucciones para almacén..."></textarea>
-
     <div class="actions">
       <button class="btn-secondary" onclick="goToStep(2)">← Atrás</button>
       <button class="btn-primary" onclick="goToStep(4)">Revisar →</button>
@@ -342,25 +369,16 @@
     };
 
     const estado = {
-      categoria: null,
-      numero: null,
-      equipoId: null,
-      dispositivoExiste: false,
-      dispositivoData: null,
-      errores: [],
-      piezaAccion: 'no',
-      piezaNombre: '',
-      piezaErrorTxt: '',
-      materiales: [],
-      mesa: null,
-      notas: '',
+      categoria: null, numero: null, equipoId: null,
+      dispositivoExiste: false, dispositivoData: null,
+      errores: [], piezaAccion: 'no', piezaNombre: '', piezaErrorTxt: '',
+      materiales: [], mesa: null, notas: '',
       tecnicoId: localStorage.getItem('irc_user_id'),
       tecnicoNombre: localStorage.getItem('irc_user_nombre')
     };
 
     document.getElementById('headerUser').textContent = estado.tecnicoNombre || '';
 
-    // ─── STEP NAVIGATION ───
     function goToStep(n) {
       for (let i = 1; i <= 4; i++) {
         document.getElementById('panel' + i).classList.remove('active');
@@ -375,12 +393,10 @@
       window.scrollTo(0, 0);
     }
 
-    // ─── STEP 1: EQUIPO ───
     function selectCat(el, cat) {
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
       el.classList.add('selected');
       estado.categoria = cat;
-      // Si ya hay número, re-buscar
       const num = document.getElementById('equipoNumero').value.trim();
       if (num) buscarDispositivo();
     }
@@ -388,7 +404,6 @@
     let buscarTimeout = null;
     function onNumeroInput() {
       clearTimeout(buscarTimeout);
-      // Ocultar tarjetas mientras escribe
       document.getElementById('dispositivoCard').classList.remove('show');
       document.getElementById('nuevoDispositivoCard').classList.remove('show');
       document.getElementById('equipoStatus').textContent = '';
@@ -412,10 +427,7 @@
       input.className = 'search-box checking';
 
       const { data, error } = await supabase
-        .from('dispositivos')
-        .select('*')
-        .eq('id', equipoId)
-        .maybeSingle();
+        .from('dispositivos').select('*').eq('id', equipoId).maybeSingle();
 
       if (error) {
         statusEl.textContent = 'Error al consultar Supabase';
@@ -425,34 +437,26 @@
       }
 
       if (data) {
-        // DISPOSITIVO ENCONTRADO
         estado.dispositivoExiste = true;
         estado.dispositivoData = data;
-
         const estadoClase = { operativo: 'estado-operativo', en_reparacion: 'estado-reparacion', baja: 'estado-baja' };
         const estadoTexto = { operativo: 'Operativo', en_reparacion: 'En reparación', baja: 'Baja' };
-
         document.getElementById('dispositivoId').textContent = data.id;
         const estEl = document.getElementById('dispositivoEstado');
         estEl.textContent = estadoTexto[data.estado] || data.estado;
         estEl.className = 'dispositivo-estado ' + (estadoClase[data.estado] || '');
         document.getElementById('dispositivoInfo').textContent =
           [data.nombre, data.ubicacion].filter(Boolean).join(' · ') || 'Sin información adicional';
-
         document.getElementById('dispositivoCard').classList.add('show');
         document.getElementById('nuevoDispositivoCard').classList.remove('show');
-
         statusEl.textContent = '✓ Dispositivo encontrado';
         statusEl.className = 'equipo-status found';
         input.className = 'search-box valid';
       } else {
-        // DISPOSITIVO NO ENCONTRADO
         estado.dispositivoExiste = false;
         estado.dispositivoData = null;
-
         document.getElementById('dispositivoCard').classList.remove('show');
         document.getElementById('nuevoDispositivoCard').classList.add('show');
-
         statusEl.textContent = `"${equipoId}" no está registrado`;
         statusEl.className = 'equipo-status notfound';
         input.className = 'search-box';
@@ -461,35 +465,25 @@
 
     async function registrarYContinuar() {
       if (!estado.equipoId) return;
-
       const nombre = document.getElementById('nuevoNombre').value.trim();
       const ubicacion = document.getElementById('nuevoUbicacion').value.trim();
       const notas = document.getElementById('nuevoNotas').value.trim();
-
-      const { error } = await supabase
-        .from('dispositivos')
-        .insert({
-          id: estado.equipoId,
-          categoria: estado.categoria,
-          numero: estado.numero,
-          nombre: nombre || estado.equipoId,
-          ubicacion: ubicacion || 'Sin asignar',
-          estado: 'en_reparacion',
-          notas
-        });
-
-      if (error) {
-        showToast('Error al registrar dispositivo: ' + error.message, true);
-        return;
-      }
-
+      const { error } = await supabase.from('dispositivos').insert({
+        id: estado.equipoId, categoria: estado.categoria, numero: estado.numero,
+        nombre: nombre || estado.equipoId, ubicacion: ubicacion || 'Sin asignar',
+        estado: 'en_reparacion', notas
+      });
+      if (error) { showToast('Error al registrar: ' + error.message, true); return; }
       estado.dispositivoExiste = true;
-      showToast('✓ Dispositivo registrado correctamente');
+      showToast('✓ Dispositivo registrado');
       irAlDiagnostico();
     }
 
-    function continuarSinRegistrar() {
-      irAlDiagnostico();
+    function continuarSinRegistrar() { irAlDiagnostico(); }
+
+    function irADispositivos() {
+      sessionStorage.setItem('irc_volver_desde', 'reparacion');
+      window.location.href = 'dispositivos.html';
     }
 
     function confirmarEquipo() {
@@ -499,222 +493,17 @@
         return;
       }
       document.getElementById('equipoError').style.display = 'none';
-
-      // Si el dispositivo ya se buscó, ir directo
       if (estado.equipoId) {
-        if (estado.dispositivoExiste) {
-          irAlDiagnostico();
-        }
-        // Si no existe, el formulario de nuevo dispositivo ya está visible
-        // El usuario debe elegir registrar o continuar sin registrar
+        if (estado.dispositivoExiste) irAlDiagnostico();
       } else {
-        buscarDispositivo().then(() => {
-          if (estado.dispositivoExiste) irAlDiagnostico();
-        });
+        buscarDispositivo().then(() => { if (estado.dispositivoExiste) irAlDiagnostico(); });
       }
     }
 
     function irAlDiagnostico() {
       document.getElementById('equipoSelectedName').textContent = estado.equipoId;
-      const info = estado.dispositivoData
+      document.getElementById('equipoSelectedInfo').textContent = estado.dispositivoData
         ? [estado.dispositivoData.nombre, estado.dispositivoData.ubicacion].filter(Boolean).join(' · ')
         : 'Dispositivo no registrado';
-      document.getElementById('equipoSelectedInfo').textContent = info;
-
-      // Actualizar estado a en_reparacion si existía
       if (estado.dispositivoExiste) {
-        supabase.from('dispositivos')
-          .update({ estado: 'en_reparacion', updated_at: new Date().toISOString() })
-          .eq('id', estado.equipoId);
-      }
-
-      goToStep(2);
-    }
-
-    // ─── STEP 2: DIAGNÓSTICO ───
-    function toggleDiag(el, error) {
-      el.classList.toggle('selected');
-      if (el.classList.contains('selected')) {
-        if (!estado.errores.includes(error)) estado.errores.push(error);
-      } else {
-        estado.errores = estado.errores.filter(e => e !== error);
-      }
-    }
-
-    function selectPieza(tipo) {
-      ['no', 'reparar', 'revisar', 'desechar'].forEach(t => {
-        document.getElementById('pieza-' + t).className = 'pieza-opt';
-      });
-      document.getElementById('pieza-' + tipo).classList.add('sel-' + tipo);
-      estado.piezaAccion = tipo;
-      document.getElementById('piezaRetiradaForm').classList.toggle('hidden', tipo === 'no');
-    }
-
-    // ─── STEP 3: MATERIALES ───
-    function renderSugerencias() {
-      const sugs = new Set();
-      estado.errores.forEach(e => (SUGERENCIAS[e] || []).forEach(s => sugs.add(s)));
-      const box = document.getElementById('sugerenciasBox');
-      if (sugs.size === 0) { box.innerHTML = ''; return; }
-      box.innerHTML = `
-        <div class="section-label" style="margin-bottom:10px;">Sugeridos según diagnóstico</div>
-        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
-          ${[...sugs].map(s => `
-            <button onclick="addMaterialDirecto('${s}')"
-              style="background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.3);color:var(--a1);padding:6px 14px;border-radius:20px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;">
-              + ${s}
-            </button>`).join('')}
-        </div>`;
-    }
-
-    function addMaterialDirecto(nombre) {
-      const ex = estado.materiales.find(m => m.nombre === nombre);
-      if (ex) ex.cantidad++;
-      else estado.materiales.push({ nombre, cantidad: 1 });
-      renderMateriales();
-    }
-
-    function addMaterial() {
-      const input = document.getElementById('materialInput');
-      const nombre = input.value.trim();
-      if (!nombre) return;
-      addMaterialDirecto(nombre);
-      input.value = '';
-      input.focus();
-    }
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Enter' && document.activeElement.id === 'materialInput') addMaterial();
-    });
-
-    function renderMateriales() {
-      const list = document.getElementById('materialesList');
-      if (estado.materiales.length === 0) {
-        list.innerHTML = '<div style="text-align:center;padding:24px;opacity:0.4;font-size:14px;">Ningún material añadido todavía</div>';
-        return;
-      }
-      list.innerHTML = estado.materiales.map((m, i) => `
-        <div class="material-row">
-          <div class="material-nombre">${m.nombre}</div>
-          <div class="material-qty">
-            <button class="qty-btn" onclick="cambiarQty(${i},-1)">−</button>
-            <span class="qty-num">${m.cantidad}</span>
-            <button class="qty-btn" onclick="cambiarQty(${i},1)">+</button>
-          </div>
-          <button class="material-remove" onclick="removeMaterial(${i})">✕</button>
-        </div>`).join('');
-    }
-
-    function cambiarQty(i, d) { estado.materiales[i].cantidad = Math.max(1, estado.materiales[i].cantidad + d); renderMateriales(); }
-    function removeMaterial(i) { estado.materiales.splice(i, 1); renderMateriales(); }
-
-    function selectMesa(el, mesa) {
-      document.querySelectorAll('.mesa-btn').forEach(b => b.classList.remove('selected'));
-      el.classList.add('selected');
-      estado.mesa = mesa;
-    }
-
-    // ─── STEP 4: RESUMEN ───
-    function renderResumen() {
-      estado.notas = document.getElementById('notasReparacion').value;
-      estado.piezaNombre = document.getElementById('piezaNombre')?.value || '';
-      estado.piezaErrorTxt = document.getElementById('piezaError')?.value || '';
-
-      const piezaTexto = {
-        no: 'Sin pieza retirada',
-        reparar: `Reparar — ${estado.piezaNombre || '(sin nombre)'}`,
-        revisar: `Revisar después — ${estado.piezaNombre || '(sin nombre)'}`,
-        desechar: `Desechar — ${estado.piezaNombre || '(sin nombre)'}`
-      };
-
-      document.getElementById('resumenCard').innerHTML = `
-        <div class="resumen-row"><span class="resumen-label">Equipo</span><span class="resumen-value"><strong>${estado.equipoId}</strong></span></div>
-        <div class="resumen-row"><span class="resumen-label">Registrado en sistema</span><span class="resumen-value">${estado.dispositivoExiste ? '✓ Sí' : '— No'}</span></div>
-        <div class="resumen-row"><span class="resumen-label">Errores detectados</span><span class="resumen-value">${estado.errores.length ? estado.errores.join(', ') : 'Ninguno marcado'}</span></div>
-        <div class="resumen-row"><span class="resumen-label">Pieza retirada</span><span class="resumen-value">${piezaTexto[estado.piezaAccion]}</span></div>
-        <div class="resumen-row"><span class="resumen-label">Materiales (${estado.materiales.length})</span><span class="resumen-value">${estado.materiales.length ? estado.materiales.map(m => `${m.nombre} ×${m.cantidad}`).join(', ') : 'Ninguno'}</span></div>
-        <div class="resumen-row"><span class="resumen-label">Mesa</span><span class="resumen-value">${estado.mesa || 'No asignada'}</span></div>
-        <div class="resumen-row"><span class="resumen-label">Técnico</span><span class="resumen-value">${estado.tecnicoNombre}</span></div>
-        ${estado.notas ? `<div class="resumen-row"><span class="resumen-label">Notas</span><span class="resumen-value">${estado.notas}</span></div>` : ''}
-      `;
-    }
-
-    // ─── CONFIRMAR ───
-    async function confirmarReparacion() {
-      const btn = document.getElementById('btnConfirmar');
-      btn.disabled = true;
-      btn.textContent = 'Guardando...';
-
-      try {
-        const ts = Date.now().toString().slice(-6);
-        const repId = 'REP-' + ts;
-        const pedId = 'PED-' + ts;
-
-        const { error: repErr } = await supabase.from('reparaciones').insert({
-          id: repId,
-          equipo_tipo: estado.categoria,
-          equipo_id: estado.equipoId,
-          diagnostico: { errores: estado.errores, pieza_accion: estado.piezaAccion, pieza_nombre: estado.piezaNombre, pieza_error: estado.piezaErrorTxt },
-          materiales_usados: estado.materiales,
-          tecnico_id: estado.tecnicoId,
-          estado: 'en_proceso',
-          notas: estado.notas
-        });
-        if (repErr) throw repErr;
-
-        if (estado.materiales.length > 0) {
-          const { error: pedErr } = await supabase.from('pedidos').insert({
-            id: pedId,
-            tecnico_id: estado.tecnicoId,
-            mesa: estado.mesa,
-            estado: 'pendiente',
-            prioridad: 'normal',
-            items: estado.materiales.map(m => ({ producto_nombre: m.nombre, cantidad: m.cantidad, entregado: false })),
-            notas: `Reparación ${repId}${estado.notas ? ' — ' + estado.notas : ''}`
-          });
-          if (pedErr) throw pedErr;
-        }
-
-        if (['reparar', 'revisar'].includes(estado.piezaAccion)) {
-          await supabase.from('reacondicionados').insert({
-            id: 'IN-REP-' + ts,
-            retirado_de: estado.equipoId,
-            error_detectado: estado.piezaErrorTxt || estado.errores.join(', '),
-            tecnico_id: estado.tecnicoId,
-            estado: 'pendiente',
-            notas: estado.piezaNombre
-          });
-        }
-
-        await supabase.from('historial').insert({
-          tipo: 'reparacion_creada',
-          usuario_id: estado.tecnicoId,
-          entidad_tipo: 'reparacion',
-          entidad_id: repId,
-          detalles: { equipo: estado.equipoId, errores: estado.errores, pedido: estado.materiales.length ? pedId : null }
-        });
-
-        showToast(`✓ Reparación ${repId} iniciada${estado.materiales.length ? ` · Pedido ${pedId} enviado` : ''}`);
-        setTimeout(() => window.location.href = 'escritorio.html', 2500);
-
-      } catch (err) {
-        console.error(err);
-        showToast('Error: ' + err.message, true);
-        btn.disabled = false;
-        btn.textContent = '✓ Iniciar Reparación';
-      }
-    }
-
-    function showToast(msg, isError = false) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.className = 'toast' + (isError ? ' error' : '');
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 4000);
-    }
-
-    // Render inicial
-    renderMateriales();
-  </script>
-</body>
-</html>
+        supabase.from('disp
