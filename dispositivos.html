@@ -222,6 +222,7 @@
           <div class="form-label">Notas</div>
           <input type="text" class="form-input" id="detNotas">
         </div>
+        <!-- ✅ NUEVO: botones guardar + eliminar -->
         <div style="margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; align-items:center;">
           <button class="btn-primary" style="margin-top:0;" onclick="guardarCambios()">Guardar cambios</button>
           <button onclick="eliminarDispositivo()" style="background:rgba(255,60,172,0.1); border:1px solid rgba(255,60,172,0.3); color:var(--a2); border-radius:8px; padding:10px 18px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif;">
@@ -246,7 +247,6 @@
       'https://raoxkjnwrccoxjcipfpv.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzMxNzgsImV4cCI6MjA5MTgwOTE3OH0.dlPG4hpA-ypmGkqrP0ohaiOfMtXq5dpVmV7QNOt7_Qs'
     );
-    // Helper schema irc — igual que en reparacion.html
     const irc = () => supabase;
   </script>
   <script src="auth.js"></script>
@@ -255,7 +255,6 @@
     let filtroEstado = 'todos';
     let dispositivoActual = null;
 
-    // Volver a reparacion si venimos de ahí
     const volverDesde = sessionStorage.getItem('irc_volver_desde');
     if (volverDesde === 'reparacion') {
       document.getElementById('btnVolver').href = 'reparacion.html';
@@ -267,7 +266,6 @@
         .from('dispositivos')
         .select('*')
         .order('created_at', { ascending: false });
-
       if (error) {
         document.getElementById('tablaBody').innerHTML =
           `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">Error: ${error.message}</div></div>`;
@@ -296,19 +294,16 @@
           (d.categoria || '').toLowerCase().includes(busqueda);
         return matchEstado && matchBusqueda;
       });
-
       const body = document.getElementById('tablaBody');
       if (filtrados.length === 0) {
         body.innerHTML = `<div class="empty-state"><div class="empty-icon">🖥️</div><div class="empty-text">No se encontraron dispositivos</div></div>`;
         return;
       }
-
       const estadoBadge = {
         operativo: '<span class="badge badge-operativo">Operativo</span>',
         en_reparacion: '<span class="badge badge-reparacion">En reparación</span>',
         baja: '<span class="badge badge-baja">Baja</span>'
       };
-
       body.innerHTML = filtrados.map(d => `
         <div class="table-row" onclick="abrirDetalle('${d.id}')">
           <div class="td td-id">${d.id}</div>
@@ -331,9 +326,7 @@
 
     function filtrar() { renderTabla(); }
 
-    function abrirModalNuevo() {
-      document.getElementById('modalNuevo').classList.add('show');
-    }
+    function abrirModalNuevo() { document.getElementById('modalNuevo').classList.add('show'); }
 
     function cerrarModalNuevo() {
       document.getElementById('modalNuevo').classList.remove('show');
@@ -362,34 +355,23 @@
       const estado = document.getElementById('nuevoEstadoM').value;
       const notas = document.getElementById('nuevoNotasM').value.trim();
       const errEl = document.getElementById('nuevoError');
-
       if (!cat || !num) {
         errEl.textContent = 'Categoría y número son obligatorios';
         errEl.style.display = 'block';
         return;
       }
-
       const id = `${cat}-${num.padStart(3,'0')}`;
-
       const { data: existe } = await irc().from('dispositivos').select('id').eq('id', id).maybeSingle();
       if (existe) {
         errEl.textContent = `El dispositivo ${id} ya está registrado`;
         errEl.style.display = 'block';
         return;
       }
-
       const { error } = await irc().from('dispositivos').insert({
         id, categoria: cat, numero: num.padStart(3,'0'),
-        nombre: nombre || id, ubicacion: ubicacion || 'Sin asignar',
-        estado, notas
+        nombre: nombre || id, ubicacion: ubicacion || 'Sin asignar', estado, notas
       });
-
-      if (error) {
-        errEl.textContent = 'Error: ' + error.message;
-        errEl.style.display = 'block';
-        return;
-      }
-
+      if (error) { errEl.textContent = 'Error: ' + error.message; errEl.style.display = 'block'; return; }
       showToast(`✓ Dispositivo ${id} registrado`);
       cerrarModalNuevo();
       cargarDispositivos();
@@ -398,7 +380,6 @@
     async function abrirDetalle(id) {
       dispositivoActual = dispositivos.find(d => d.id === id);
       if (!dispositivoActual) return;
-
       const d = dispositivoActual;
       document.getElementById('detId').textContent = d.id;
       document.getElementById('detInfo').textContent =
@@ -406,19 +387,15 @@
       document.getElementById('detNombre').value = d.nombre || '';
       document.getElementById('detUbicacion').value = d.ubicacion || '';
       document.getElementById('detNotas').value = d.notas || '';
-
       const mapaBtn = { operativo: 'btnEstOp', en_reparacion: 'btnEstRep', baja: 'btnEstBaja' };
       Object.values(mapaBtn).forEach(btnId => document.getElementById(btnId).classList.remove('active'));
       if (mapaBtn[d.estado]) document.getElementById(mapaBtn[d.estado]).classList.add('active');
-
-      // Cargar reparaciones del schema irc
       const { data: reps } = await irc()
         .from('reparaciones')
         .select('id, estado, created_at, diagnostico')
         .eq('equipo_id', id)
         .order('created_at', { ascending: false })
         .limit(10);
-
       const repList = document.getElementById('detReparaciones');
       if (reps && reps.length > 0) {
         repList.innerHTML = reps.map(r => `
@@ -435,7 +412,6 @@
       } else {
         repList.innerHTML = '<div style="text-align:center;padding:16px;opacity:0.4;font-size:13px;">Sin reparaciones registradas</div>';
       }
-
       document.getElementById('modalDetalle').classList.add('show');
     }
 
@@ -450,17 +426,13 @@
         .from('dispositivos')
         .update({ estado: nuevoEstado, updated_at: new Date().toISOString() })
         .eq('id', dispositivoActual.id);
-
       if (error) { showToast('Error: ' + error.message, true); return; }
-
       dispositivoActual.estado = nuevoEstado;
       const idx = dispositivos.findIndex(d => d.id === dispositivoActual.id);
       if (idx >= 0) dispositivos[idx].estado = nuevoEstado;
-
       const mapaBtn = { operativo: 'btnEstOp', en_reparacion: 'btnEstRep', baja: 'btnEstBaja' };
       Object.values(mapaBtn).forEach(id => document.getElementById(id).classList.remove('active'));
       if (mapaBtn[nuevoEstado]) document.getElementById(mapaBtn[nuevoEstado]).classList.add('active');
-
       actualizarStats();
       renderTabla();
       showToast('✓ Estado actualizado');
@@ -471,47 +443,38 @@
       const nombre = document.getElementById('detNombre').value.trim();
       const ubicacion = document.getElementById('detUbicacion').value.trim();
       const notas = document.getElementById('detNotas').value.trim();
-
       const { error } = await irc()
         .from('dispositivos')
         .update({ nombre, ubicacion, notas, updated_at: new Date().toISOString() })
         .eq('id', dispositivoActual.id);
-
       if (error) { showToast('Error: ' + error.message, true); return; }
-
       const idx = dispositivos.findIndex(d => d.id === dispositivoActual.id);
       if (idx >= 0) { dispositivos[idx].nombre = nombre; dispositivos[idx].ubicacion = ubicacion; }
       document.getElementById('detInfo').textContent =
         [nombre, ubicacion].filter(Boolean).join(' · ') || 'Sin información adicional';
-
       renderTabla();
       showToast('✓ Cambios guardados');
     }
 
+    // ✅ NUEVO: eliminar dispositivo
     async function eliminarDispositivo() {
       if (!dispositivoActual) return;
-
       const { data: reps } = await irc()
         .from('reparaciones')
         .select('id')
         .eq('equipo_id', dispositivoActual.id)
         .eq('estado', 'en_proceso')
         .limit(1);
-
       if (reps && reps.length > 0) {
         showToast('No se puede eliminar — tiene reparaciones activas', true);
         return;
       }
-
       if (!confirm(`¿Eliminar "${dispositivoActual.id}" definitivamente?\nEsta acción no se puede deshacer.`)) return;
-
       const { error } = await irc()
         .from('dispositivos')
         .delete()
         .eq('id', dispositivoActual.id);
-
       if (error) { showToast('Error: ' + error.message, true); return; }
-
       const idEliminado = dispositivoActual.id;
       dispositivos = dispositivos.filter(d => d.id !== idEliminado);
       cerrarModalDetalle();
@@ -519,7 +482,7 @@
       renderTabla();
       showToast(`✓ Dispositivo ${idEliminado} eliminado`);
     }
-    
+
     function showToast(msg, isError = false) {
       const t = document.getElementById('toast');
       t.textContent = msg;
