@@ -286,7 +286,7 @@
     // ─── CARGAR DATOS ───
     async function cargarDispositivos() {
       const { data, error } = await supabase
-        .from('dispositivos')
+        .from('irc.dispositivos')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -408,7 +408,7 @@
 
       // Verificar si ya existe
       const { data: existe } = await supabase
-        .from('dispositivos').select('id').eq('id', id).maybeSingle();
+        .from('irc.dispositivos').select('id').eq('id', id).maybeSingle();
 
       if (existe) {
         errEl.textContent = `El dispositivo ${id} ya está registrado`;
@@ -416,7 +416,7 @@
         return;
       }
 
-      const { error } = await supabase.from('dispositivos').insert({
+      const { error } = await supabase.from('irc.dispositivos').insert({
         id, categoria: cat, numero: num.padStart(3,'0'),
         nombre: nombre || id, ubicacion: ubicacion || 'Sin asignar',
         estado, notas
@@ -490,7 +490,7 @@
       if (!dispositivoActual) return;
 
       const { error } = await supabase
-        .from('dispositivos')
+        .from('irc.dispositivos')
         .update({ estado: nuevoEstado, updated_at: new Date().toISOString() })
         .eq('id', dispositivoActual.id);
 
@@ -518,7 +518,7 @@
       const notas = document.getElementById('detNotas').value.trim();
 
       const { error } = await supabase
-        .from('dispositivos')
+        .from('irc.dispositivos')
         .update({ nombre, ubicacion, notas, updated_at: new Date().toISOString() })
         .eq('id', dispositivoActual.id);
 
