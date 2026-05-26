@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRC — Escritorio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <style>
+    :root {
+      --a1: #c8ff00;
+      --a2: #ff3cac;
+      --a3: #00d4ff;
+      --bg: #07070f;
+      --bg2: #0f0f1a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: white;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--a1);
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .user-name {
+      font-weight: 500;
+    }
+    .user-rol {
+      font-size: 12px;
+      opacity: 0.6;
+      text-transform: uppercase;
+      background: rgba(200, 255, 0, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: var(--a1);
+    }
+    .btn-logout {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .btn-logout:hover {
+      border-color: var(--a2);
+      color: var(--a2);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+    }
+    .card {
+      background: var(--bg2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 32px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: white;
+      display: block;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--a1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+    .card-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 14px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">InOut Repair Center</div>
+    <div class="user-info">
+      <div>
+        <div class="user-name" id="userName">Cargando...</div>
+        <div class="user-rol" id="userRol"></div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <a href="reparacion.html" class="card">
+      <div class="card-icon">🔧</div>
+      <div class="card-title">Nueva Reparación</div>
+      <div class="card-desc">Iniciar proceso de diagnóstico y reparación</div>
+    </a>
+
+    <a href="pedidos.html" class="card">
+      <div class="card-icon">📦</div>
+      <div class="card-title">Mis Pedidos</div>
+      <div class="card-desc">Ver pedidos de materiales activos</div>
+    </a>
+
+    <a href="reacondicionados.html" class="card">
+      <div class="card-icon">♻️</div>
+      <div class="card-title">Reacondicionados</div>
+      <div class="card-desc">Gestionar piezas para reparar</div>
+    </a>
+
+    <a href="historial.html" class="card">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Mi Historial</div>
+      <div class="card-desc">Ver mis reparaciones completadas</div>
+    </a>
+  </div>
+
+  <script>
+    const userName = localStorage.getItem('irc_user_nombre');
+    const userRol = localStorage.getItem('irc_user_rol');
+    
+    document.getElementById('userName').textContent = userName || 'Usuario';
+    document.getElementById('userRol').textContent = userRol === 'superadmin' ? 'SuperAdmin' : userRol || 'Técnico';
+  </script>
+</body>
+</html>
