@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRC — InOut Repair Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --a1: #c8ff00;
+      --a2: #ff3cac;
+      --a3: #00d4ff;
+      --bg: #07070f;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: white;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .container {
+      text-align: center;
+      max-width: 500px;
+    }
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--a1);
+      margin-bottom: 40px;
+    }
+    .time {
+      font-size: 72px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .date {
+      font-size: 18px;
+      opacity: 0.6;
+      margin-bottom: 60px;
+    }
+    .rfid-prompt {
+      font-size: 24px;
+      color: var(--a3);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .error {
+      background: var(--a2);
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">InOut Repair Center</div>
+    <div class="time" id="time">00:00</div>
+    <div class="date" id="date">Lunes, 1 de enero de 2024</div>
+    <div class="rfid-prompt">🔖 Acerca tu tarjeta RFID</div>
+    <div class="error" id="error"></div>
+  </div>
+
+  <script>
+    const supabase = window.supabase.createClient(
+      'https://raoxkjnwrccoxjcipfpv.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE0MzEwNDIsImV4cCI6MjA0NzAwNzA0Mn0.sb_publishable__-K1pC4bOJHRf8JQ__OOzg_jqLxlGla'
+    );
+
+    // Actualizar reloj
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('time').textContent = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('date').textContent = now.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Login RFID
+    async function loginRFID(uid) {
+      try {
+        const { data: empleado, error } = await supabase
+          .from('empleados')
+          .select('*')
+          .eq('rfid_uid', uid)
+          .eq('activo', true)
+          .single();
+
+        if (error || !empleado) {
+          showError('Usuario no autorizado');
+          return;
+        }
+
+        // Verificar que tenga rol IRC
+        if (!empleado.irc_rol && empleado.role !== 'superadmin') {
+          showError('No tienes acceso al sistema IRC');
+          return;
+        }
+
+        // Registrar historial de acceso
+        await supabase.from('irc.historial').insert({
+          tipo: 'login',
+          usuario_id: empleado.id,
+          detalles: { rfid_uid: uid }
+        });
+
+        // Actualizar último acceso
+        await supabase
+          .from('empleados')
+          .update({ ultimo_acceso: new Date().toISOString() })
+          .eq('id', empleado.id);
+
+        // Guardar sesión local
+        localStorage.setItem('irc_user_id', empleado.id);
+        localStorage.setItem('irc_user_rol', empleado.irc_rol || empleado.role);
+        localStorage.setItem('irc_user_nombre', `${empleado.nombre} ${empleado.apellido}`);
+
+        // Redirigir al escritorio
+        window.location.href = 'escritorio.html';
+      } catch (err) {
+        showError('Error de conexión');
+        console.error(err);
+      }
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('error');
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', 3000);
+    }
+
+    // Detectar NFC (Web NFC API)
+    if ('NDEFReader' in window) {
+      const ndef = new NDEFReader();
+      ndef.scan().then(() => {
+        ndef.onreading = event => {
+          const uid = Array.from(new Uint8Array(event.serialNumber))
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join('').toUpperCase();
+          loginRFID(uid);
+        };
+      }).catch(err => console.log('NFC no disponible:', err));
+    }
+
+    // Fallback: input manual (para testing)
+    document.addEventListener('keypress', e => {
+      if (e.key === 'Enter') {
+        const uid = prompt('UID RFID (solo para testing):');
+        if (uid) loginRFID(uid);
+      }
+    });
+  </script>
+</body>
+</html>
