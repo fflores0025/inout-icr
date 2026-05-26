@@ -5,8 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IRC — Escritorio</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- 1. Cargar Supabase SDK primero -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- 2. Inicializar cliente Supabase -->
+  <script>
+    const supabase = window.supabase.createClient(
+      'https://raoxkjnwrccoxjcipfpv.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE0MzEwNDIsImV4cCI6MjA0NzAwNzA0Mn0.sb_publishable__-K1pC4bOJHRf8JQ__OOzg_jqLxlGla'
+    );
+  </script>
+  
+  <!-- 3. Cargar auth guard -->
   <script src="auth.js"></script>
+  
   <style>
     :root {
       --a1: #c8ff00;
@@ -63,6 +76,7 @@
       cursor: pointer;
       font-size: 14px;
       transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
     }
     .btn-logout:hover {
       border-color: var(--a2);
@@ -148,7 +162,15 @@
     const userRol = localStorage.getItem('irc_user_rol');
     
     document.getElementById('userName').textContent = userName || 'Usuario';
-    document.getElementById('userRol').textContent = userRol === 'superadmin' ? 'SuperAdmin' : userRol || 'Técnico';
+    
+    const rolDisplay = {
+      'superadmin': 'SuperAdmin',
+      'supervisor_irc': 'Supervisor',
+      'tecnico': 'Técnico',
+      'almacen': 'Almacén'
+    };
+    
+    document.getElementById('userRol').textContent = rolDisplay[userRol] || 'Técnico';
   </script>
 </body>
 </html>
