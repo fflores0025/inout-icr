@@ -604,7 +604,7 @@
         });
 
         showToast(`✓ Reparación ${repId} iniciada${estado.materiales.length ? ` · Pedido ${pedId} enviado` : ''}`);
-        setTimeout(() => window.location.href = 'escritorio.html', 2500);
+        setTimeout(() => window.location.href = `reparacion_activa.html?id=${repId}`, 2500);
       } catch (err) {
         console.error(err);
         showToast('Error: ' + err.message, true);
