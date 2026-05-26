@@ -9,30 +9,25 @@
     :root { --a1: #c8ff00; --a2: #ff3cac; --a3: #00d4ff; --bg: #07070f; --bg2: #0f0f1a; --bg3: #161622; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: white; min-height: 100vh; padding: 20px; }
-
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
     .header-left { display: flex; align-items: center; gap: 16px; }
     .logo { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--a1); }
     .btn-back { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-family: 'DM Sans', sans-serif; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
     .btn-back:hover { border-color: var(--a1); color: var(--a1); }
-
     .steps { display: flex; gap: 0; margin-bottom: 40px; background: var(--bg2); border-radius: 12px; padding: 4px; max-width: 600px; }
     .step { flex: 1; text-align: center; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 500; opacity: 0.4; transition: all 0.2s; }
     .step.active { background: var(--a1); color: var(--bg); opacity: 1; font-weight: 600; }
     .step.done { opacity: 0.7; color: var(--a1); }
-
     .panel { display: none; max-width: 800px; }
     .panel.active { display: block; }
     .panel-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; margin-bottom: 8px; }
     .panel-subtitle { font-size: 14px; opacity: 0.6; margin-bottom: 28px; }
-
     .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
     .cat-btn { background: var(--bg2); border: 2px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 20px 12px; text-align: center; cursor: pointer; transition: all 0.2s; }
     .cat-btn:hover { border-color: var(--a1); transform: translateY(-2px); }
     .cat-btn.selected { border-color: var(--a1); background: rgba(200,255,0,0.08); }
     .cat-icon { font-size: 32px; margin-bottom: 8px; }
     .cat-name { font-size: 13px; font-weight: 500; }
-
     .equipo-row { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
     .equipo-numero-wrap { position: relative; flex: 1; max-width: 300px; }
     .search-box { width: 100%; background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 16px; font-size: 15px; color: white; font-family: 'DM Sans', sans-serif; }
@@ -41,13 +36,11 @@
     .search-box.valid { border-color: var(--a1); }
     .search-box.invalid { border-color: var(--a2); }
     .search-box.checking { border-color: var(--a3); }
-
     .equipo-status { font-size: 13px; margin-top: 6px; min-height: 20px; }
     .equipo-status.found { color: var(--a1); }
     .equipo-status.notfound { color: var(--a3); }
     .equipo-status.checking { color: rgba(255,255,255,0.5); }
     .equipo-status.error { color: var(--a2); }
-
     .dispositivo-card { background: rgba(200,255,0,0.06); border: 2px solid var(--a1); border-radius: 10px; padding: 16px 20px; margin-bottom: 16px; display: none; }
     .dispositivo-card.show { display: block; }
     .dispositivo-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
@@ -57,7 +50,6 @@
     .estado-reparacion { background: rgba(255,60,172,0.15); color: var(--a2); }
     .estado-baja { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); }
     .dispositivo-info { font-size: 13px; opacity: 0.7; }
-
     .nuevo-dispositivo-card { background: rgba(0,212,255,0.04); border: 2px solid rgba(0,212,255,0.3); border-radius: 10px; padding: 20px; margin-bottom: 16px; display: none; }
     .nuevo-dispositivo-card.show { display: block; }
     .nuevo-dispositivo-title { font-size: 15px; font-weight: 600; color: var(--a3); margin-bottom: 16px; }
@@ -67,7 +59,6 @@
     .form-label { font-size: 12px; font-weight: 600; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.05em; }
     .form-input { background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 14px; font-size: 14px; color: white; font-family: 'DM Sans', sans-serif; }
     .form-input:focus { outline: none; border-color: var(--a3); }
-
     .btn-primary { background: var(--a1); color: var(--bg); border: none; border-radius: 8px; padding: 14px 32px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
     .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200,255,0,0.3); }
     .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
@@ -77,7 +68,6 @@
     .btn-cyan:hover { background: rgba(0,212,255,0.25); }
     .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); border-radius: 8px; padding: 10px 18px; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
     .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: white; }
-
     .diag-section { margin-bottom: 24px; }
     .diag-section-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.5; margin-bottom: 12px; }
     .diag-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
@@ -87,7 +77,6 @@
     .diag-check { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; transition: all 0.15s; }
     .diag-item.selected .diag-check { background: var(--a1); border-color: var(--a1); color: var(--bg); }
     .diag-label { font-size: 14px; }
-
     .pieza-options { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
     .pieza-opt { flex: 1; min-width: 130px; background: var(--bg2); border: 2px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 14px; text-align: center; cursor: pointer; transition: all 0.2s; }
     .pieza-opt:hover { border-color: rgba(255,255,255,0.3); }
@@ -97,7 +86,6 @@
     .pieza-opt.sel-desechar { border-color: var(--a2); background: rgba(255,60,172,0.08); }
     .pieza-opt-icon { font-size: 24px; margin-bottom: 6px; }
     .pieza-opt-label { font-size: 13px; font-weight: 500; }
-
     .materiales-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
     .material-row { display: flex; align-items: center; gap: 12px; background: var(--bg2); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px 16px; }
     .material-nombre { flex: 1; font-size: 14px; }
@@ -109,34 +97,27 @@
     .material-remove:hover { color: var(--a2); }
     .add-row { display: flex; gap: 10px; margin-bottom: 16px; }
     .add-row .search-box { margin-bottom: 0; flex: 1; }
-
     .mesa-selector { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
     .mesa-btn { background: var(--bg2); border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 20px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.15s; }
     .mesa-btn.selected { border-color: var(--a1); background: rgba(200,255,0,0.08); color: var(--a1); }
-
     textarea { width: 100%; background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 16px; font-size: 14px; color: white; font-family: 'DM Sans', sans-serif; resize: vertical; min-height: 80px; margin-bottom: 16px; }
     textarea:focus { outline: none; border-color: var(--a1); }
     textarea::placeholder { color: rgba(255,255,255,0.3); }
-
     .resumen-card { background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
     .resumen-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06); gap: 16px; }
     .resumen-row:last-child { border-bottom: none; }
     .resumen-label { font-size: 13px; opacity: 0.5; white-space: nowrap; }
     .resumen-value { font-size: 14px; font-weight: 500; text-align: right; }
-
     .actions { display: flex; gap: 12px; margin-top: 8px; }
     .equipo-selected-box { background: rgba(200,255,0,0.06); border: 2px solid var(--a1); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
     .btn-change { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-family: 'DM Sans', sans-serif; }
-
     .toast { position: fixed; bottom: 24px; right: 24px; background: var(--bg2); border: 1px solid rgba(200,255,0,0.3); color: white; padding: 14px 20px; border-radius: 10px; font-size: 14px; transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 999; max-width: 360px; }
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast.error { border-color: rgba(255,60,172,0.4); }
-
     .section-label { font-size: 13px; font-weight: 600; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
     .hidden { display: none !important; }
     .piezaRetiradaForm { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
     .piezaRetiradaForm .search-box { flex: 1; min-width: 200px; margin: 0; }
-
     .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
     .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
     .divider-text { font-size: 12px; opacity: 0.4; }
@@ -158,11 +139,9 @@
     <div class="step" id="step4">4. Confirmar</div>
   </div>
 
-  <!-- PANEL 1: EQUIPO -->
   <div class="panel active" id="panel1">
     <div class="panel-title">¿Qué equipo vas a reparar?</div>
     <div class="panel-subtitle">Selecciona la categoría e introduce el número de equipo</div>
-
     <div class="cat-grid">
       <div class="cat-btn" onclick="selectCat(this,'INOUT-KIOSK')"><div class="cat-icon">🖥️</div><div class="cat-name">Kiosco</div></div>
       <div class="cat-btn" onclick="selectCat(this,'INOUT-MINI-PC')"><div class="cat-icon">💻</div><div class="cat-name">Mini PC</div></div>
@@ -174,19 +153,13 @@
       <div class="cat-btn" onclick="selectCat(this,'INOUT-CABLE')"><div class="cat-icon">🖧</div><div class="cat-name">Cable</div></div>
       <div class="cat-btn" onclick="selectCat(this,'OTRO')"><div class="cat-icon">🔧</div><div class="cat-name">Otro</div></div>
     </div>
-
     <div class="equipo-row">
       <div class="equipo-numero-wrap">
-        <input type="text" class="search-box" id="equipoNumero"
-          placeholder="Número (ej: 001, 002...)"
-          oninput="onNumeroInput()"
-          onblur="buscarDispositivo()">
+        <input type="text" class="search-box" id="equipoNumero" placeholder="Número (ej: 001, 002...)" oninput="onNumeroInput()" onblur="buscarDispositivo()">
         <div class="equipo-status" id="equipoStatus"></div>
       </div>
       <button class="btn-custom" onclick="confirmarEquipo()">Continuar →</button>
     </div>
-
-    <!-- Dispositivo encontrado -->
     <div class="dispositivo-card" id="dispositivoCard">
       <div class="dispositivo-card-header">
         <span class="dispositivo-id" id="dispositivoId">—</span>
@@ -194,8 +167,6 @@
       </div>
       <div class="dispositivo-info" id="dispositivoInfo">—</div>
     </div>
-
-    <!-- Dispositivo NO encontrado -->
     <div class="nuevo-dispositivo-card" id="nuevoDispositivoCard">
       <div class="nuevo-dispositivo-title">✦ Dispositivo nuevo — Registrar en el sistema</div>
       <div class="form-grid">
@@ -209,40 +180,26 @@
         </div>
         <div class="form-group full">
           <div class="form-label">Notas</div>
-          <input type="text" class="form-input" id="nuevoNotas" placeholder="Información adicional sobre el dispositivo">
+          <input type="text" class="form-input" id="nuevoNotas" placeholder="Información adicional">
         </div>
       </div>
       <div style="margin-top:16px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
         <button class="btn-cyan" onclick="registrarYContinuar()">✓ Registrar y continuar</button>
         <button class="btn-ghost" onclick="continuarSinRegistrar()">Continuar sin registrar</button>
-        <button class="btn-ghost" onclick="irADispositivos()" style="margin-left:auto;">
-          Gestionar dispositivos →
-        </button>
+        <button class="btn-ghost" onclick="irADispositivos()" style="margin-left:auto;">Gestionar dispositivos →</button>
       </div>
     </div>
-
-    <div id="equipoError" style="color:var(--a2); font-size:13px; margin-top:8px; display:none;">
-      Selecciona una categoría y un número de equipo
-    </div>
-
-    <!-- Acceso directo a dispositivos -->
-    <div class="divider">
-      <div class="divider-line"></div>
-      <span class="divider-text">gestión</span>
-      <div class="divider-line"></div>
-    </div>
+    <div id="equipoError" style="color:var(--a2); font-size:13px; margin-top:8px; display:none;">Selecciona una categoría y un número de equipo</div>
+    <div class="divider"><div class="divider-line"></div><span class="divider-text">gestión</span><div class="divider-line"></div></div>
     <div style="display:flex; align-items:center; justify-content:space-between;">
       <div>
         <div style="font-size:14px; font-weight:500;">¿Quieres ver o registrar dispositivos?</div>
         <div style="font-size:12px; opacity:0.4; margin-top:4px;">Inventario completo de equipos InOut</div>
       </div>
-      <a href="dispositivos.html" class="btn-ghost" style="text-decoration:none;">
-        Ver dispositivos →
-      </a>
+      <a href="dispositivos.html" class="btn-ghost" style="text-decoration:none;">Ver dispositivos →</a>
     </div>
   </div>
 
-  <!-- PANEL 2: DIAGNÓSTICO -->
   <div class="panel" id="panel2">
     <div class="equipo-selected-box">
       <div>
@@ -251,10 +208,8 @@
       </div>
       <button class="btn-change" onclick="goToStep(1)">Cambiar</button>
     </div>
-
     <div class="panel-title">¿Qué errores presenta?</div>
     <div class="panel-subtitle">Selecciona todos los errores detectados</div>
-
     <div class="diag-section">
       <div class="diag-section-title">Conectividad</div>
       <div class="diag-grid">
@@ -264,7 +219,6 @@
         <div class="diag-item" onclick="toggleDiag(this,'Sin conexión')"><div class="diag-check">✓</div><span class="diag-label">Sin conexión</span></div>
       </div>
     </div>
-
     <div class="diag-section">
       <div class="diag-section-title">Hardware</div>
       <div class="diag-grid">
@@ -276,7 +230,6 @@
         <div class="diag-item" onclick="toggleDiag(this,'Daño físico')"><div class="diag-check">✓</div><span class="diag-label">Daño físico</span></div>
       </div>
     </div>
-
     <div class="diag-section">
       <div class="diag-section-title">Software / Sistema</div>
       <div class="diag-grid">
@@ -286,7 +239,6 @@
         <div class="diag-item" onclick="toggleDiag(this,'Lentitud extrema')"><div class="diag-check">✓</div><span class="diag-label">Lentitud extrema</span></div>
       </div>
     </div>
-
     <div class="diag-section">
       <div class="diag-section-title">Pieza retirada</div>
       <div class="pieza-options">
@@ -300,14 +252,12 @@
         <input type="text" class="search-box" id="piezaError" placeholder="Error detectado en la pieza">
       </div>
     </div>
-
     <div class="actions">
       <button class="btn-secondary" onclick="goToStep(1)">← Atrás</button>
       <button class="btn-primary" onclick="goToStep(3)">Materiales →</button>
     </div>
   </div>
 
-  <!-- PANEL 3: MATERIALES -->
   <div class="panel" id="panel3">
     <div class="panel-title">Materiales necesarios</div>
     <div class="panel-subtitle">Añade los materiales que necesitas del almacén</div>
@@ -333,7 +283,6 @@
     </div>
   </div>
 
-  <!-- PANEL 4: CONFIRMAR -->
   <div class="panel" id="panel4">
     <div class="panel-title">Confirmar reparación</div>
     <div class="panel-subtitle">Revisa el resumen antes de enviar</div>
@@ -352,6 +301,8 @@
       'https://raoxkjnwrccoxjcipfpv.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzMxNzgsImV4cCI6MjA5MTgwOTE3OH0.dlPG4hpA-ypmGkqrP0ohaiOfMtXq5dpVmV7QNOt7_Qs'
     );
+    // Helper para schema irc
+    const irc = () => supabase.schema('irc');
   </script>
   <script src="auth.js"></script>
   <script>
@@ -413,29 +364,24 @@
     async function buscarDispositivo() {
       const num = document.getElementById('equipoNumero').value.trim();
       if (!num || !estado.categoria) return;
-
       const numPad = num.padStart(3, '0');
       const equipoId = `${estado.categoria}-${numPad}`;
       estado.equipoId = equipoId;
       estado.numero = numPad;
-
       const statusEl = document.getElementById('equipoStatus');
       const input = document.getElementById('equipoNumero');
-
       statusEl.textContent = 'Buscando...';
       statusEl.className = 'equipo-status checking';
       input.className = 'search-box checking';
 
-      const { data, error } = await supabase
-        .from('irc.dispositivos').select('*').eq('id', equipoId).maybeSingle();
+      const { data, error } = await irc().from('dispositivos').select('*').eq('id', equipoId).maybeSingle();
 
       if (error) {
-        statusEl.textContent = 'Error al consultar Supabase';
+        statusEl.textContent = 'Error: ' + error.message;
         statusEl.className = 'equipo-status error';
         input.className = 'search-box invalid';
         return;
       }
-
       if (data) {
         estado.dispositivoExiste = true;
         estado.dispositivoData = data;
@@ -468,7 +414,7 @@
       const nombre = document.getElementById('nuevoNombre').value.trim();
       const ubicacion = document.getElementById('nuevoUbicacion').value.trim();
       const notas = document.getElementById('nuevoNotas').value.trim();
-      const { error } = await supabase.from('irc.dispositivos').insert({
+      const { error } = await irc().from('dispositivos').insert({
         id: estado.equipoId, categoria: estado.categoria, numero: estado.numero,
         nombre: nombre || estado.equipoId, ubicacion: ubicacion || 'Sin asignar',
         estado: 'en_reparacion', notas
@@ -506,4 +452,176 @@
         ? [estado.dispositivoData.nombre, estado.dispositivoData.ubicacion].filter(Boolean).join(' · ')
         : 'Dispositivo no registrado';
       if (estado.dispositivoExiste) {
-        supabase.from('disp
+        irc().from('dispositivos')
+          .update({ estado: 'en_reparacion', updated_at: new Date().toISOString() })
+          .eq('id', estado.equipoId);
+      }
+      goToStep(2);
+    }
+
+    function toggleDiag(el, error) {
+      el.classList.toggle('selected');
+      if (el.classList.contains('selected')) {
+        if (!estado.errores.includes(error)) estado.errores.push(error);
+      } else {
+        estado.errores = estado.errores.filter(e => e !== error);
+      }
+    }
+
+    function selectPieza(tipo) {
+      ['no', 'reparar', 'revisar', 'desechar'].forEach(t => {
+        document.getElementById('pieza-' + t).className = 'pieza-opt';
+      });
+      document.getElementById('pieza-' + tipo).classList.add('sel-' + tipo);
+      estado.piezaAccion = tipo;
+      document.getElementById('piezaRetiradaForm').classList.toggle('hidden', tipo === 'no');
+    }
+
+    function renderSugerencias() {
+      const sugs = new Set();
+      estado.errores.forEach(e => (SUGERENCIAS[e] || []).forEach(s => sugs.add(s)));
+      const box = document.getElementById('sugerenciasBox');
+      if (sugs.size === 0) { box.innerHTML = ''; return; }
+      box.innerHTML = `
+        <div class="section-label" style="margin-bottom:10px;">Sugeridos según diagnóstico</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+          ${[...sugs].map(s => `
+            <button onclick="addMaterialDirecto('${s}')"
+              style="background:rgba(200,255,0,0.08);border:1px solid rgba(200,255,0,0.3);color:var(--a1);padding:6px 14px;border-radius:20px;cursor:pointer;font-size:13px;font-family:'DM Sans',sans-serif;">
+              + ${s}
+            </button>`).join('')}
+        </div>`;
+    }
+
+    function addMaterialDirecto(nombre) {
+      const ex = estado.materiales.find(m => m.nombre === nombre);
+      if (ex) ex.cantidad++;
+      else estado.materiales.push({ nombre, cantidad: 1 });
+      renderMateriales();
+    }
+
+    function addMaterial() {
+      const input = document.getElementById('materialInput');
+      const nombre = input.value.trim();
+      if (!nombre) return;
+      addMaterialDirecto(nombre);
+      input.value = '';
+      input.focus();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && document.activeElement.id === 'materialInput') addMaterial();
+    });
+
+    function renderMateriales() {
+      const list = document.getElementById('materialesList');
+      if (estado.materiales.length === 0) {
+        list.innerHTML = '<div style="text-align:center;padding:24px;opacity:0.4;font-size:14px;">Ningún material añadido todavía</div>';
+        return;
+      }
+      list.innerHTML = estado.materiales.map((m, i) => `
+        <div class="material-row">
+          <div class="material-nombre">${m.nombre}</div>
+          <div class="material-qty">
+            <button class="qty-btn" onclick="cambiarQty(${i},-1)">−</button>
+            <span class="qty-num">${m.cantidad}</span>
+            <button class="qty-btn" onclick="cambiarQty(${i},1)">+</button>
+          </div>
+          <button class="material-remove" onclick="removeMaterial(${i})">✕</button>
+        </div>`).join('');
+    }
+
+    function cambiarQty(i, d) { estado.materiales[i].cantidad = Math.max(1, estado.materiales[i].cantidad + d); renderMateriales(); }
+    function removeMaterial(i) { estado.materiales.splice(i, 1); renderMateriales(); }
+
+    function selectMesa(el, mesa) {
+      document.querySelectorAll('.mesa-btn').forEach(b => b.classList.remove('selected'));
+      el.classList.add('selected');
+      estado.mesa = mesa;
+    }
+
+    function renderResumen() {
+      estado.notas = document.getElementById('notasReparacion').value;
+      estado.piezaNombre = document.getElementById('piezaNombre')?.value || '';
+      estado.piezaErrorTxt = document.getElementById('piezaError')?.value || '';
+      const piezaTexto = {
+        no: 'Sin pieza retirada',
+        reparar: `Reparar — ${estado.piezaNombre || '(sin nombre)'}`,
+        revisar: `Revisar después — ${estado.piezaNombre || '(sin nombre)'}`,
+        desechar: `Desechar — ${estado.piezaNombre || '(sin nombre)'}`
+      };
+      document.getElementById('resumenCard').innerHTML = `
+        <div class="resumen-row"><span class="resumen-label">Equipo</span><span class="resumen-value"><strong>${estado.equipoId}</strong></span></div>
+        <div class="resumen-row"><span class="resumen-label">Registrado</span><span class="resumen-value">${estado.dispositivoExiste ? '✓ Sí' : '— No'}</span></div>
+        <div class="resumen-row"><span class="resumen-label">Errores</span><span class="resumen-value">${estado.errores.length ? estado.errores.join(', ') : 'Ninguno'}</span></div>
+        <div class="resumen-row"><span class="resumen-label">Pieza</span><span class="resumen-value">${piezaTexto[estado.piezaAccion]}</span></div>
+        <div class="resumen-row"><span class="resumen-label">Materiales (${estado.materiales.length})</span><span class="resumen-value">${estado.materiales.length ? estado.materiales.map(m => `${m.nombre} ×${m.cantidad}`).join(', ') : 'Ninguno'}</span></div>
+        <div class="resumen-row"><span class="resumen-label">Mesa</span><span class="resumen-value">${estado.mesa || 'No asignada'}</span></div>
+        <div class="resumen-row"><span class="resumen-label">Técnico</span><span class="resumen-value">${estado.tecnicoNombre}</span></div>
+        ${estado.notas ? `<div class="resumen-row"><span class="resumen-label">Notas</span><span class="resumen-value">${estado.notas}</span></div>` : ''}
+      `;
+    }
+
+    async function confirmarReparacion() {
+      const btn = document.getElementById('btnConfirmar');
+      btn.disabled = true;
+      btn.textContent = 'Guardando...';
+      try {
+        const ts = Date.now().toString().slice(-6);
+        const repId = 'REP-' + ts;
+        const pedId = 'PED-' + ts;
+
+        const { error: repErr } = await irc().from('reparaciones').insert({
+          id: repId, equipo_tipo: estado.categoria, equipo_id: estado.equipoId,
+          diagnostico: { errores: estado.errores, pieza_accion: estado.piezaAccion, pieza_nombre: estado.piezaNombre, pieza_error: estado.piezaErrorTxt },
+          materiales_usados: estado.materiales, tecnico_id: estado.tecnicoId,
+          estado: 'en_proceso', notas: estado.notas
+        });
+        if (repErr) throw repErr;
+
+        if (estado.materiales.length > 0) {
+          const { error: pedErr } = await irc().from('pedidos').insert({
+            id: pedId, tecnico_id: estado.tecnicoId, mesa: estado.mesa,
+            estado: 'pendiente', prioridad: 'normal',
+            items: estado.materiales.map(m => ({ producto_nombre: m.nombre, cantidad: m.cantidad, entregado: false })),
+            notas: `Reparación ${repId}${estado.notas ? ' — ' + estado.notas : ''}`
+          });
+          if (pedErr) throw pedErr;
+        }
+
+        if (['reparar', 'revisar'].includes(estado.piezaAccion)) {
+          await irc().from('reacondicionados').insert({
+            id: 'IN-REP-' + ts, retirado_de: estado.equipoId,
+            error_detectado: estado.piezaErrorTxt || estado.errores.join(', '),
+            tecnico_id: estado.tecnicoId, estado: 'pendiente', notas: estado.piezaNombre
+          });
+        }
+
+        await irc().from('historial').insert({
+          tipo: 'reparacion_creada', usuario_id: estado.tecnicoId,
+          entidad_tipo: 'reparacion', entidad_id: repId,
+          detalles: { equipo: estado.equipoId, errores: estado.errores, pedido: estado.materiales.length ? pedId : null }
+        });
+
+        showToast(`✓ Reparación ${repId} iniciada${estado.materiales.length ? ` · Pedido ${pedId} enviado` : ''}`);
+        setTimeout(() => window.location.href = 'escritorio.html', 2500);
+      } catch (err) {
+        console.error(err);
+        showToast('Error: ' + err.message, true);
+        btn.disabled = false;
+        btn.textContent = '✓ Iniciar Reparación';
+      }
+    }
+
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast' + (isError ? ' error' : '');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    renderMateriales();
+  </script>
+</body>
+</html>
