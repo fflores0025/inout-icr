@@ -427,7 +427,7 @@
       input.className = 'search-box checking';
 
       const { data, error } = await supabase
-        .from('dispositivos').select('*').eq('id', equipoId).maybeSingle();
+        .from('irc.dispositivos').select('*').eq('id', equipoId).maybeSingle();
 
       if (error) {
         statusEl.textContent = 'Error al consultar Supabase';
@@ -468,7 +468,7 @@
       const nombre = document.getElementById('nuevoNombre').value.trim();
       const ubicacion = document.getElementById('nuevoUbicacion').value.trim();
       const notas = document.getElementById('nuevoNotas').value.trim();
-      const { error } = await supabase.from('dispositivos').insert({
+      const { error } = await supabase.from('irc.dispositivos').insert({
         id: estado.equipoId, categoria: estado.categoria, numero: estado.numero,
         nombre: nombre || estado.equipoId, ubicacion: ubicacion || 'Sin asignar',
         estado: 'en_reparacion', notas
