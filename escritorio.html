@@ -6,10 +6,10 @@
   <title>IRC — Escritorio</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   
-  <!-- 1. Cargar Supabase SDK primero -->
+  <!-- ✅ PASO 1: Cargar Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
-  <!-- 2. Inicializar cliente Supabase -->
+  <!-- ✅ PASO 2: Inicializar cliente Supabase (inline script) -->
   <script>
     const supabase = window.supabase.createClient(
       'https://raoxkjnwrccoxjcipfpv.supabase.co',
@@ -17,7 +17,7 @@
     );
   </script>
   
-  <!-- 3. Cargar auth guard -->
+  <!-- ✅ PASO 3: Cargar auth guard (ahora supabase ya existe) -->
   <script src="auth.js"></script>
   
   <style>
