@@ -1,10 +1,13 @@
 // auth.js — Auth guard para InOut Repair Center
-const supabase = window.supabase.createClient(
-  'https://raoxkjnwrccoxjcipfpv.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE0MzEwNDIsImV4cCI6MjA0NzAwNzA0Mn0.sb_publishable__-K1pC4bOJHRf8JQ__OOzg_jqLxlGla'
-);
+// Asume que supabase ya está declarado en el HTML que incluye este script
 
 (async function checkAuth() {
+  // Verificar que supabase existe
+  if (typeof supabase === 'undefined') {
+    console.error('Supabase no está disponible. Incluye el SDK antes de auth.js');
+    return;
+  }
+
   const { data: { session } } = await supabase.auth.getSession();
   
   if (!session) {
@@ -43,6 +46,11 @@ const supabase = window.supabase.createClient(
 })();
 
 async function logout() {
+  if (typeof supabase === 'undefined') {
+    console.error('Supabase no disponible');
+    return;
+  }
+  
   if (confirm('¿Cerrar sesión?')) {
     await supabase.auth.signOut();
     localStorage.clear();
@@ -50,9 +58,12 @@ async function logout() {
   }
 }
 
-supabase.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_OUT') {
-    localStorage.clear();
-    window.location.href = 'index.html';
-  }
-});
+// Escuchar cambios de sesión solo si supabase está disponible
+if (typeof supabase !== 'undefined') {
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT') {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+  });
+}
