@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRC — Reparación Activa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { --a1: #c8ff00; --a2: #ff3cac; --a3: #00d4ff; --bg: #07070f; --bg2: #0f0f1a; --bg3: #161622; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: white; min-height: 100vh; padding: 20px; }
+
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .logo { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--a1); }
+    .btn-back { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-family: 'DM Sans', sans-serif; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-back:hover { border-color: rgba(255,255,255,0.4); }
+
+    /* LAYOUT */
+    .layout { display: grid; grid-template-columns: 1fr 360px; gap: 20px; max-width: 1200px; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+    /* CARDS */
+    .card { background: var(--bg2); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    .card-title { font-size: 12px; font-weight: 600; opacity: 0.4; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; }
+
+    /* DISPOSITIVO INFO */
+    .equipo-badge { display: inline-flex; align-items: center; gap: 10px; background: rgba(200,255,0,0.08); border: 1px solid rgba(200,255,0,0.2); border-radius: 8px; padding: 10px 16px; margin-bottom: 16px; }
+    .equipo-id { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; color: var(--a1); }
+    .rep-id { font-size: 12px; opacity: 0.5; font-family: 'DM Mono', monospace; }
+
+    /* CRONÓMETRO */
+    .cronometro-wrap { text-align: center; padding: 24px 0 16px; }
+    .cronometro { font-family: 'DM Mono', monospace; font-size: 56px; font-weight: 500; color: white; letter-spacing: 0.02em; line-height: 1; }
+    .cronometro.warning { color: #ffd60a; }
+    .crono-label { font-size: 12px; opacity: 0.4; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .crono-btns { display: flex; gap: 8px; justify-content: center; margin-top: 16px; }
+    .crono-btn { padding: 8px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; border: none; transition: all 0.15s; }
+    .crono-btn-pause { background: rgba(255,255,255,0.1); color: white; }
+    .crono-btn-pause:hover { background: rgba(255,255,255,0.15); }
+    .crono-btn-pause.paused { background: rgba(200,255,0,0.15); color: var(--a1); }
+
+    /* CHECKLIST ERRORES */
+    .check-list { display: flex; flex-direction: column; gap: 8px; }
+    .check-item { display: flex; align-items: center; gap: 12px; background: var(--bg3); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px 14px; cursor: pointer; transition: all 0.15s; user-select: none; }
+    .check-item:hover { border-color: rgba(255,255,255,0.15); }
+    .check-item.resuelto { border-color: rgba(200,255,0,0.3); background: rgba(200,255,0,0.04); }
+    .check-item.resuelto .check-label { text-decoration: line-through; opacity: 0.5; }
+    .check-box { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.2); border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.15s; }
+    .check-item.resuelto .check-box { background: var(--a1); border-color: var(--a1); color: var(--bg); }
+    .check-label { font-size: 14px; flex: 1; }
+    .check-badge { font-size: 11px; background: rgba(255,60,172,0.15); color: var(--a2); padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+    .check-item.resuelto .check-badge { background: rgba(200,255,0,0.1); color: var(--a1); }
+
+    /* MATERIALES */
+    .material-item { display: flex; align-items: center; gap: 12px; background: var(--bg3); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px 14px; cursor: pointer; transition: all 0.15s; user-select: none; margin-bottom: 8px; }
+    .material-item:hover { border-color: rgba(255,255,255,0.15); }
+    .material-item.probado { border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.04); }
+    .material-item.probado .check-box { background: var(--a3); border-color: var(--a3); color: var(--bg); }
+    .material-item.probado .check-label { opacity: 0.6; }
+    .mat-qty { font-size: 12px; background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 10px; font-weight: 600; white-space: nowrap; }
+
+    /* NOTAS */
+    .nota-input { width: 100%; background: var(--bg3); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px 14px; font-size: 14px; color: white; font-family: 'DM Sans', sans-serif; resize: vertical; min-height: 80px; }
+    .nota-input:focus { outline: none; border-color: rgba(255,255,255,0.2); }
+    .nota-input::placeholder { color: rgba(255,255,255,0.2); }
+    .btn-nota { margin-top: 8px; background: rgba(255,255,255,0.08); border: none; color: white; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .btn-nota:hover { background: rgba(255,255,255,0.12); }
+
+    /* PROGRESO SIDEBAR */
+    .progreso-ring { display: flex; justify-content: center; margin: 8px 0 16px; }
+    .progreso-num { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; text-align: center; color: var(--a1); }
+    .progreso-label { font-size: 12px; opacity: 0.4; text-align: center; margin-top: 2px; }
+
+    /* HISTORIAL NOTAS */
+    .nota-log { display: flex; flex-direction: column; gap: 8px; max-height: 300px; overflow-y: auto; }
+    .nota-entry { background: var(--bg3); border-radius: 8px; padding: 10px 14px; }
+    .nota-entry-text { font-size: 13px; line-height: 1.5; }
+    .nota-entry-time { font-size: 11px; opacity: 0.3; margin-top: 4px; font-family: 'DM Mono', monospace; }
+
+    /* COMPLETAR */
+    .btn-completar { width: 100%; background: var(--a1); color: var(--bg); border: none; border-radius: 10px; padding: 16px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; margin-top: 8px; }
+    .btn-completar:hover { box-shadow: 0 4px 20px rgba(200,255,0,0.4); transform: translateY(-1px); }
+    .btn-completar:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-pausar { width: 100%; background: transparent; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 12px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; margin-top: 8px; }
+    .btn-pausar:hover { border-color: rgba(255,255,255,0.2); color: white; }
+
+    /* PROGRESS BAR */
+    .progress-bar-wrap { background: rgba(255,255,255,0.06); border-radius: 4px; height: 6px; margin-bottom: 8px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--a1); border-radius: 4px; transition: width 0.3s; }
+
+    /* LOADING */
+    .loading-state { text-align: center; padding: 60px; opacity: 0.4; font-size: 16px; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--bg2); border: 1px solid rgba(200,255,0,0.3); color: white; padding: 14px 20px; border-radius: 10px; font-size: 14px; transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 999; max-width: 360px; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.error { border-color: rgba(255,60,172,0.4); }
+
+    /* MODAL COMPLETAR */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; width: 100%; max-width: 480px; }
+    .modal-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 8px; color: var(--a1); }
+    .modal-sub { font-size: 14px; opacity: 0.6; margin-bottom: 24px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .form-label { font-size: 12px; font-weight: 600; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.05em; }
+    .form-input { background: var(--bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 14px; font-size: 14px; color: white; font-family: 'DM Sans', sans-serif; }
+    .form-input:focus { outline: none; border-color: var(--a1); }
+    textarea.form-input { resize: vertical; min-height: 80px; }
+    .estado-selector { display: flex; gap: 8px; }
+    .estado-opt { flex: 1; padding: 10px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.1); cursor: pointer; text-align: center; font-size: 13px; font-weight: 600; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+    .estado-opt.sel-completada { border-color: var(--a1); background: rgba(200,255,0,0.1); color: var(--a1); }
+    .estado-opt.sel-pausada { border-color: var(--a3); background: rgba(0,212,255,0.1); color: var(--a3); }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .btn-primary { background: var(--a1); color: var(--bg); border: none; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .btn-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; padding: 12px 20px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <a href="escritorio.html" class="btn-back">← Escritorio</a>
+      <div class="logo">Reparación Activa</div>
+    </div>
+    <div style="font-size:13px; opacity:0.5;" id="headerInfo">—</div>
+  </div>
+
+  <div id="loadingState" class="loading-state">Cargando reparación...</div>
+
+  <div id="mainContent" style="display:none;">
+    <div class="layout">
+
+      <!-- COLUMNA PRINCIPAL -->
+      <div>
+
+        <!-- INFO EQUIPO + CRONÓMETRO -->
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
+            <div>
+              <div class="equipo-badge">
+                <div class="equipo-id" id="equipoId">—</div>
+              </div>
+              <div class="rep-id" id="repId">—</div>
+            </div>
+            <div class="cronometro-wrap" style="padding:0;">
+              <div class="cronometro" id="cronometro">00:00:00</div>
+              <div class="crono-label">tiempo de reparación</div>
+              <div class="crono-btns">
+                <button class="crono-btn crono-btn-pause" id="btnPausaCrono" onclick="toggleCronometro()">⏸ Pausar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHECKLIST ERRORES -->
+        <div class="card">
+          <div class="card-title">Errores detectados — marca los resueltos</div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="erroresProgress" style="width:0%"></div>
+          </div>
+          <div style="font-size:12px; opacity:0.4; margin-bottom:12px;" id="erroresCount">0 de 0 resueltos</div>
+          <div class="check-list" id="erroresList">
+            <div style="opacity:0.3; font-size:13px;">Sin errores registrados</div>
+          </div>
+        </div>
+
+        <!-- MATERIALES UTILIZADOS -->
+        <div class="card">
+          <div class="card-title">Materiales solicitados — marca los probados/instalados</div>
+          <div id="materialesList">
+            <div style="opacity:0.3; font-size:13px;">Sin materiales registrados</div>
+          </div>
+        </div>
+
+        <!-- NOTAS DE PROGRESO -->
+        <div class="card">
+          <div class="card-title">Notas de progreso</div>
+          <textarea class="nota-input" id="notaInput" placeholder="Añade observaciones sobre el progreso de la reparación..."></textarea>
+          <button class="btn-nota" onclick="agregarNota()">+ Añadir nota</button>
+
+          <div id="notaLogWrap" style="margin-top:16px; display:none;">
+            <div style="font-size:12px; opacity:0.4; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px;">Registro</div>
+            <div class="nota-log" id="notaLog"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SIDEBAR -->
+      <div>
+
+        <!-- PROGRESO GENERAL -->
+        <div class="card">
+          <div class="card-title">Progreso</div>
+          <div class="progreso-num" id="progresoNum">0%</div>
+          <div class="progreso-label">errores resueltos</div>
+          <div class="progress-bar-wrap" style="margin-top:12px;">
+            <div class="progress-bar-fill" id="progresoBar" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- TÉCNICO -->
+        <div class="card">
+          <div class="card-title">Técnico</div>
+          <div style="font-size:15px; font-weight:600;" id="tecnicoNombre">—</div>
+          <div style="font-size:12px; opacity:0.4; margin-top:4px;" id="tecnicoMesa">—</div>
+        </div>
+
+        <!-- ACCIONES -->
+        <div class="card">
+          <div class="card-title">Acciones</div>
+          <button class="btn-completar" onclick="abrirModalCompletar('completada')">
+            ✓ Marcar como completada
+          </button>
+          <button class="btn-pausar" onclick="abrirModalCompletar('pausada')">
+            ⏸ Pausar reparación
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL COMPLETAR/PAUSAR -->
+  <div class="modal-overlay" id="modalCompletar">
+    <div class="modal">
+      <div class="modal-title" id="modalCompletarTitle">Completar reparación</div>
+      <div class="modal-sub" id="modalCompletarSub">Confirma el resultado de la reparación</div>
+
+      <div class="form-group">
+        <div class="form-label">Estado final del dispositivo</div>
+        <div class="estado-selector">
+          <div class="estado-opt sel-completada" id="optCompletada" onclick="selEstado('completada')">✓ Reparado</div>
+          <div class="estado-opt" id="optPausada" onclick="selEstado('pausada')">⏸ Pausada</div>
+          <div class="estado-opt" id="optIrreparable" onclick="selEstado('irreparable')" style="flex:none; padding:10px 14px; font-size:12px;">✕ Irreparable</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">Solución aplicada / motivo de pausa</div>
+        <textarea class="form-input" id="solucionInput" placeholder="Describe qué se hizo para solucionar el problema, o por qué se pausa..."></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-primary" onclick="confirmarCierre()">Confirmar</button>
+        <button class="btn-secondary" onclick="cerrarModalCompletar()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    var supabase = window.supabase.createClient(
+      'https://raoxkjnwrccoxjcipfpv.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzMxNzgsImV4cCI6MjA5MTgwOTE3OH0.dlPG4hpA-ypmGkqrP0ohaiOfMtXq5dpVmV7QNOt7_Qs'
+    );
+    const irc = () => supabase;
+  </script>
+  <script src="auth.js"></script>
+  <script>
+    // ─── ESTADO ───
+    let reparacion = null;
+    let erroresCheck = [];   // {texto, resuelto}
+    let materialesCheck = []; // {nombre, cantidad, probado}
+    let notas = [];
+    let estadoCierre = 'completada';
+
+    // Cronómetro
+    let cronoSegundos = 0;
+    let cronoInterval = null;
+    let cronoPausado = false;
+
+    const tecnicoNombre = localStorage.getItem('irc_user_nombre') || '—';
+    const tecnicoId = localStorage.getItem('irc_user_id');
+
+    // ─── INIT ───
+    async function init() {
+      // Obtener ID de reparación desde URL
+      const params = new URLSearchParams(window.location.search);
+      const repId = params.get('id');
+
+      if (!repId) {
+        // Sin ID — buscar reparación activa del técnico
+        const { data } = await irc()
+          .from('reparaciones')
+          .select('*')
+          .eq('tecnico_id', tecnicoId)
+          .eq('estado', 'en_proceso')
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+
+        if (!data) {
+          document.getElementById('loadingState').textContent = 'No hay reparaciones activas';
+          return;
+        }
+        reparacion = data;
+      } else {
+        const { data, error } = await irc()
+          .from('reparaciones')
+          .select('*')
+          .eq('id', repId)
+          .maybeSingle();
+
+        if (error || !data) {
+          document.getElementById('loadingState').textContent = 'Reparación no encontrada';
+          return;
+        }
+        reparacion = data;
+      }
+
+      cargarReparacion();
+    }
+
+    function cargarReparacion() {
+      const r = reparacion;
+
+      // Mostrar contenido
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('mainContent').style.display = 'block';
+
+      // Info básica
+      document.getElementById('equipoId').textContent = r.equipo_id || r.equipo_tipo || '—';
+      document.getElementById('repId').textContent = r.id;
+      document.getElementById('headerInfo').textContent = `${r.equipo_id || r.equipo_tipo} · ${r.id}`;
+      document.getElementById('tecnicoNombre').textContent = tecnicoNombre;
+      document.getElementById('tecnicoMesa').textContent = r.mesa ? `Mesa: ${r.mesa}` : 'Sin mesa asignada';
+
+      // Calcular tiempo transcurrido desde inicio
+      const inicio = new Date(r.tiempo_inicio || r.created_at);
+      const ahora = new Date();
+      const segundosTranscurridos = Math.floor((ahora - inicio) / 1000);
+      cronoSegundos = Math.max(0, segundosTranscurridos);
+      actualizarCronometro();
+      iniciarCronometro();
+
+      // Errores desde diagnóstico
+      const errores = r.diagnostico?.errores || [];
+      const erroresGuardados = r.diagnostico?.errores_resueltos || [];
+      erroresCheck = errores.map(e => ({
+        texto: e,
+        resuelto: erroresGuardados.includes(e)
+      }));
+      renderErrores();
+
+      // Materiales
+      const mats = r.materiales_usados || [];
+      const matsGuardados = r.diagnostico?.materiales_probados || [];
+      materialesCheck = mats.map(m => ({
+        nombre: m.nombre,
+        cantidad: m.cantidad,
+        probado: matsGuardados.includes(m.nombre)
+      }));
+      renderMateriales();
+
+      // Notas
+      notas = r.diagnostico?.notas_progreso || [];
+      renderNotas();
+
+      actualizarProgreso();
+    }
+
+    // ─── CRONÓMETRO ───
+    function iniciarCronometro() {
+      if (cronoInterval) clearInterval(cronoInterval);
+      cronoInterval = setInterval(() => {
+        if (!cronoPausado) {
+          cronoSegundos++;
+          actualizarCronometro();
+        }
+      }, 1000);
+    }
+
+    function actualizarCronometro() {
+      const h = Math.floor(cronoSegundos / 3600);
+      const m = Math.floor((cronoSegundos % 3600) / 60);
+      const s = cronoSegundos % 60;
+      const str = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      const el = document.getElementById('cronometro');
+      el.textContent = str;
+      // Amarillo si más de 2 horas
+      el.className = 'cronometro' + (h >= 2 ? ' warning' : '');
+    }
+
+    function toggleCronometro() {
+      cronoPausado = !cronoPausado;
+      const btn = document.getElementById('btnPausaCrono');
+      if (cronoPausado) {
+        btn.textContent = '▶ Reanudar';
+        btn.classList.add('paused');
+      } else {
+        btn.textContent = '⏸ Pausar';
+        btn.classList.remove('paused');
+      }
+    }
+
+    // ─── ERRORES ───
+    function renderErrores() {
+      const list = document.getElementById('erroresList');
+      if (erroresCheck.length === 0) {
+        list.innerHTML = '<div style="opacity:0.3; font-size:13px;">Sin errores registrados</div>';
+        return;
+      }
+      list.innerHTML = erroresCheck.map((e, i) => `
+        <div class="check-item ${e.resuelto ? 'resuelto' : ''}" onclick="toggleError(${i})">
+          <div class="check-box">${e.resuelto ? '✓' : ''}</div>
+          <span class="check-label">${e.texto}</span>
+          <span class="check-badge">${e.resuelto ? 'Resuelto' : 'Pendiente'}</span>
+        </div>`).join('');
+      actualizarProgreso();
+    }
+
+    function toggleError(i) {
+      erroresCheck[i].resuelto = !erroresCheck[i].resuelto;
+      renderErrores();
+      guardarProgreso();
+    }
+
+    // ─── MATERIALES ───
+    function renderMateriales() {
+      const list = document.getElementById('materialesList');
+      if (materialesCheck.length === 0) {
+        list.innerHTML = '<div style="opacity:0.3; font-size:13px;">Sin materiales registrados</div>';
+        return;
+      }
+      list.innerHTML = materialesCheck.map((m, i) => `
+        <div class="material-item ${m.probado ? 'probado' : ''}" onclick="toggleMaterial(${i})">
+          <div class="check-box">${m.probado ? '✓' : ''}</div>
+          <span class="check-label">${m.nombre}</span>
+          <span class="mat-qty">×${m.cantidad}</span>
+          <span class="check-badge" style="${m.probado ? 'background:rgba(0,212,255,0.1);color:var(--a3)' : ''}">${m.probado ? 'Instalado' : 'Pendiente'}</span>
+        </div>`).join('');
+    }
+
+    function toggleMaterial(i) {
+      materialesCheck[i].probado = !materialesCheck[i].probado;
+      renderMateriales();
+      guardarProgreso();
+    }
+
+    // ─── NOTAS ───
+    function agregarNota() {
+      const input = document.getElementById('notaInput');
+      const texto = input.value.trim();
+      if (!texto) return;
+      notas.push({
+        texto,
+        tiempo: cronoSegundos,
+        ts: new Date().toISOString()
+      });
+      input.value = '';
+      renderNotas();
+      guardarProgreso();
+      showToast('✓ Nota añadida');
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.ctrlKey && document.activeElement.id === 'notaInput') {
+        agregarNota();
+      }
+    });
+
+    function renderNotas() {
+      const wrap = document.getElementById('notaLogWrap');
+      const log = document.getElementById('notaLog');
+      if (notas.length === 0) { wrap.style.display = 'none'; return; }
+      wrap.style.display = 'block';
+      log.innerHTML = [...notas].reverse().map(n => {
+        const h = Math.floor(n.tiempo / 3600);
+        const m = Math.floor((n.tiempo % 3600) / 60);
+        const s = n.tiempo % 60;
+        const tiempo = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        return `
+          <div class="nota-entry">
+            <div class="nota-entry-text">${n.texto}</div>
+            <div class="nota-entry-time">⏱ ${tiempo} · ${new Date(n.ts).toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'})}</div>
+          </div>`;
+      }).join('');
+    }
+
+    // ─── PROGRESO ───
+    function actualizarProgreso() {
+      const total = erroresCheck.length;
+      const resueltos = erroresCheck.filter(e => e.resuelto).length;
+      const pct = total > 0 ? Math.round((resueltos / total) * 100) : 0;
+
+      document.getElementById('progresoNum').textContent = pct + '%';
+      document.getElementById('progresoBar').style.width = pct + '%';
+      document.getElementById('erroresProgress').style.width = pct + '%';
+      document.getElementById('erroresCount').textContent = `${resueltos} de ${total} resueltos`;
+    }
+
+    // ─── GUARDAR PROGRESO (auto-save) ───
+    let saveTimeout = null;
+    async function guardarProgreso() {
+      actualizarProgreso();
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(async () => {
+        if (!reparacion) return;
+        const { error } = await irc()
+          .from('reparaciones')
+          .update({
+            diagnostico: {
+              ...reparacion.diagnostico,
+              errores_resueltos: erroresCheck.filter(e => e.resuelto).map(e => e.texto),
+              materiales_probados: materialesCheck.filter(m => m.probado).map(m => m.nombre),
+              notas_progreso: notas
+            }
+          })
+          .eq('id', reparacion.id);
+        if (!error) {
+          // Actualizar local
+          reparacion.diagnostico = {
+            ...reparacion.diagnostico,
+            errores_resueltos: erroresCheck.filter(e => e.resuelto).map(e => e.texto),
+            materiales_probados: materialesCheck.filter(m => m.probado).map(m => m.nombre),
+            notas_progreso: notas
+          };
+        }
+      }, 1500);
+    }
+
+    // ─── MODAL COMPLETAR ───
+    function abrirModalCompletar(tipo) {
+      estadoCierre = tipo;
+      const titulo = tipo === 'completada' ? '✓ Completar reparación' : '⏸ Pausar reparación';
+      const sub = tipo === 'completada'
+        ? 'El dispositivo volverá a estado Operativo'
+        : 'La reparación quedará en pausa para reanudar más tarde';
+      document.getElementById('modalCompletarTitle').textContent = titulo;
+      document.getElementById('modalCompletarSub').textContent = sub;
+      selEstado(tipo === 'pausada' ? 'pausada' : 'completada');
+      document.getElementById('modalCompletar').classList.add('show');
+    }
+
+    function cerrarModalCompletar() {
+      document.getElementById('modalCompletar').classList.remove('show');
+    }
+
+    function selEstado(s) {
+      estadoCierre = s;
+      ['completada','pausada','irreparable'].forEach(opt => {
+        const el = document.getElementById('opt' + opt.charAt(0).toUpperCase() + opt.slice(1));
+        if (el) el.className = 'estado-opt' + (s === opt ? ` sel-${opt}` : '');
+      });
+    }
+
+    async function confirmarCierre() {
+      const solucion = document.getElementById('solucionInput').value.trim();
+      cronoPausado = true;
+      clearInterval(cronoInterval);
+
+      const minutos = Math.floor(cronoSegundos / 60);
+      const estadoDispositivo = estadoCierre === 'completada' ? 'operativo' : estadoCierre === 'irreparable' ? 'baja' : 'en_reparacion';
+
+      try {
+        // Actualizar reparación
+        const { error: repErr } = await irc()
+          .from('reparaciones')
+          .update({
+            estado: estadoCierre,
+            tiempo_fin: new Date().toISOString(),
+            duracion_minutos: minutos,
+            solucion: solucion || null,
+            diagnostico: {
+              ...reparacion.diagnostico,
+              errores_resueltos: erroresCheck.filter(e => e.resuelto).map(e => e.texto),
+              materiales_probados: materialesCheck.filter(m => m.probado).map(m => m.nombre),
+              notas_progreso: notas
+            }
+          })
+          .eq('id', reparacion.id);
+
+        if (repErr) throw repErr;
+
+        // Actualizar estado del dispositivo si existe
+        if (reparacion.equipo_id) {
+          await irc()
+            .from('dispositivos')
+            .update({ estado: estadoDispositivo, updated_at: new Date().toISOString() })
+            .eq('id', reparacion.equipo_id);
+        }
+
+        // Historial
+        await irc().from('historial').insert({
+          tipo: `reparacion_${estadoCierre}`,
+          usuario_id: tecnicoId,
+          entidad_tipo: 'reparacion',
+          entidad_id: reparacion.id,
+          detalles: {
+            equipo: reparacion.equipo_id,
+            duracion_minutos: minutos,
+            errores_resueltos: erroresCheck.filter(e => e.resuelto).length,
+            total_errores: erroresCheck.length
+          }
+        });
+
+        cerrarModalCompletar();
+        const msgs = {
+          completada: `✓ Reparación completada en ${minutos} min`,
+          pausada: '⏸ Reparación pausada',
+          irreparable: '✕ Dispositivo marcado como irreparable'
+        };
+        showToast(msgs[estadoCierre] || '✓ Guardado');
+        setTimeout(() => window.location.href = 'escritorio.html', 2000);
+
+      } catch (err) {
+        showToast('Error: ' + err.message, true);
+      }
+    }
+
+    // ─── UTILS ───
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast' + (isError ? ' error' : '');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    // ─── START ───
+    init();
+  </script>
+</body>
+</html>
