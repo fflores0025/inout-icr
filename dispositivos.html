@@ -222,6 +222,12 @@
           <div class="form-label">Notas</div>
           <input type="text" class="form-input" id="detNotas">
         </div>
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; align-items:center;">
+          <button class="btn-primary" style="margin-top:0;" onclick="guardarCambios()">Guardar cambios</button>
+          <button onclick="eliminarDispositivo()" style="background:rgba(255,60,172,0.1); border:1px solid rgba(255,60,172,0.3); color:var(--a2); border-radius:8px; padding:10px 18px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif;">
+            🗑 Eliminar
+          </button>
+        </div>
       </div>
       <div class="detalle-section">
         <div class="detalle-section-title">Historial de reparaciones</div>
@@ -482,6 +488,38 @@
       showToast('✓ Cambios guardados');
     }
 
+    async function eliminarDispositivo() {
+      if (!dispositivoActual) return;
+
+      const { data: reps } = await irc()
+        .from('reparaciones')
+        .select('id')
+        .eq('equipo_id', dispositivoActual.id)
+        .eq('estado', 'en_proceso')
+        .limit(1);
+
+      if (reps && reps.length > 0) {
+        showToast('No se puede eliminar — tiene reparaciones activas', true);
+        return;
+      }
+
+      if (!confirm(`¿Eliminar "${dispositivoActual.id}" definitivamente?\nEsta acción no se puede deshacer.`)) return;
+
+      const { error } = await irc()
+        .from('dispositivos')
+        .delete()
+        .eq('id', dispositivoActual.id);
+
+      if (error) { showToast('Error: ' + error.message, true); return; }
+
+      const idEliminado = dispositivoActual.id;
+      dispositivos = dispositivos.filter(d => d.id !== idEliminado);
+      cerrarModalDetalle();
+      actualizarStats();
+      renderTabla();
+      showToast(`✓ Dispositivo ${idEliminado} eliminado`);
+    }
+    
     function showToast(msg, isError = false) {
       const t = document.getElementById('toast');
       t.textContent = msg;
