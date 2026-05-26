@@ -9,14 +9,11 @@
     :root { --a1: #c8ff00; --a2: #ff3cac; --a3: #00d4ff; --bg: #07070f; --bg2: #0f0f1a; --bg3: #161622; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: white; min-height: 100vh; padding: 20px; }
-
     .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
     .header-left { display: flex; align-items: center; gap: 16px; }
     .logo { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--a1); }
     .btn-back { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-family: 'DM Sans', sans-serif; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
     .btn-back:hover { border-color: var(--a1); color: var(--a1); }
-
-    /* STATS */
     .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 28px; }
     .stat-card { background: var(--bg2); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px 20px; }
     .stat-num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; }
@@ -25,8 +22,6 @@
     .stat-reparacion .stat-num { color: var(--a2); }
     .stat-baja .stat-num { color: rgba(255,255,255,0.4); }
     .stat-total .stat-num { color: var(--a3); }
-
-    /* TOOLBAR */
     .toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
     .search-input { background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 10px 16px; font-size: 14px; color: white; font-family: 'DM Sans', sans-serif; flex: 1; min-width: 200px; }
     .search-input:focus { outline: none; border-color: var(--a1); }
@@ -36,38 +31,29 @@
     .filter-btn.active { border-color: var(--a1); color: var(--a1); background: rgba(200,255,0,0.06); }
     .btn-primary { background: var(--a1); color: var(--bg); border: none; border-radius: 8px; padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
     .btn-primary:hover { box-shadow: 0 4px 12px rgba(200,255,0,0.3); }
-
-    /* TABLA */
     .table-wrap { background: var(--bg2); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; overflow: hidden; margin-bottom: 24px; }
-    .table-header { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1.2fr 80px; gap: 0; padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .table-header { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1.2fr 80px; padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); }
     .th { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; opacity: 0.4; }
-    .table-row { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1.2fr 80px; gap: 0; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; cursor: pointer; align-items: center; }
+    .table-row { display: grid; grid-template-columns: 2fr 1.5fr 1fr 1fr 1.2fr 80px; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s; cursor: pointer; align-items: center; }
     .table-row:last-child { border-bottom: none; }
     .table-row:hover { background: rgba(255,255,255,0.03); }
     .td { font-size: 14px; }
-    .td-id { font-family: 'DM Mono', monospace; font-weight: 600; font-size: 13px; color: var(--a1); }
-    .td-nombre { font-size: 13px; opacity: 0.8; }
-    .td-ubicacion { font-size: 13px; opacity: 0.6; }
-    .td-fecha { font-size: 12px; opacity: 0.4; }
-
+    .td-id { font-weight: 600; font-size: 13px; color: var(--a1); }
+    .td-nombre, .td-ubicacion { font-size: 13px; opacity: 0.7; }
     .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
     .badge-operativo { background: rgba(200,255,0,0.12); color: var(--a1); }
     .badge-reparacion { background: rgba(255,60,172,0.12); color: var(--a2); }
     .badge-baja { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
-
     .btn-dots { background: transparent; border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: white; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; }
     .btn-dots:hover { border-color: rgba(255,255,255,0.3); }
-
     .empty-state { text-align: center; padding: 60px 20px; opacity: 0.4; }
     .empty-icon { font-size: 48px; margin-bottom: 12px; }
     .empty-text { font-size: 15px; }
-
-    /* MODAL */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
     .modal-overlay.show { display: flex; }
     .modal { background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 32px; width: 100%; max-width: 540px; max-height: 90vh; overflow-y: auto; }
     .modal-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
-    .modal-close { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 20px; cursor: pointer; padding: 4px; }
+    .modal-close { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 20px; cursor: pointer; }
     .modal-close:hover { color: white; }
     .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
     .form-label { font-size: 12px; font-weight: 600; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.05em; }
@@ -77,8 +63,6 @@
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .modal-actions { display: flex; gap: 10px; margin-top: 24px; }
     .btn-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; padding: 10px 20px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
-
-    /* MODAL DETALLE */
     .detalle-header { background: rgba(200,255,0,0.06); border: 1px solid rgba(200,255,0,0.15); border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; }
     .detalle-id { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--a1); }
     .detalle-info { font-size: 13px; opacity: 0.6; margin-top: 4px; }
@@ -97,17 +81,14 @@
     .rep-item-id { font-weight: 600; color: var(--a3); }
     .rep-item-estado { font-size: 11px; opacity: 0.6; }
     .rep-item-fecha { font-size: 11px; opacity: 0.4; }
-
     .toast { position: fixed; bottom: 24px; right: 24px; background: var(--bg2); border: 1px solid rgba(200,255,0,0.3); color: white; padding: 14px 20px; border-radius: 10px; font-size: 14px; transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 999; }
     .toast.show { transform: translateY(0); opacity: 1; }
     .toast.error { border-color: rgba(255,60,172,0.4); }
-
     .loading { text-align: center; padding: 40px; opacity: 0.4; font-size: 14px; }
-
     @media (max-width: 768px) {
       .table-header { display: none; }
-      .table-row { grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 4px; }
-      .td-nombre, .td-ubicacion, .td-fecha { display: none; }
+      .table-row { grid-template-columns: 1fr auto; }
+      .td-nombre, .td-ubicacion { display: none; }
     }
   </style>
 </head>
@@ -120,7 +101,6 @@
     <button class="btn-primary" onclick="abrirModalNuevo()">+ Nuevo dispositivo</button>
   </div>
 
-  <!-- STATS -->
   <div class="stats-row">
     <div class="stat-card stat-total"><div class="stat-num" id="statTotal">—</div><div class="stat-label">Total</div></div>
     <div class="stat-card stat-operativo"><div class="stat-num" id="statOperativo">—</div><div class="stat-label">Operativos</div></div>
@@ -128,7 +108,6 @@
     <div class="stat-card stat-baja"><div class="stat-num" id="statBaja">—</div><div class="stat-label">Baja</div></div>
   </div>
 
-  <!-- TOOLBAR -->
   <div class="toolbar">
     <input type="text" class="search-input" id="searchInput" placeholder="Buscar por ID, nombre, ubicación..." oninput="filtrar()">
     <button class="filter-btn active" onclick="setFiltro(this,'todos')">Todos</button>
@@ -137,7 +116,6 @@
     <button class="filter-btn" onclick="setFiltro(this,'baja')">Baja</button>
   </div>
 
-  <!-- TABLA -->
   <div class="table-wrap">
     <div class="table-header">
       <div class="th">ID Dispositivo</div>
@@ -147,12 +125,10 @@
       <div class="th">Ubicación</div>
       <div class="th"></div>
     </div>
-    <div id="tablaBody">
-      <div class="loading">Cargando dispositivos...</div>
-    </div>
+    <div id="tablaBody"><div class="loading">Cargando dispositivos...</div></div>
   </div>
 
-  <!-- MODAL: NUEVO DISPOSITIVO -->
+  <!-- MODAL NUEVO -->
   <div class="modal-overlay" id="modalNuevo">
     <div class="modal">
       <div class="modal-title">
@@ -211,19 +187,17 @@
     </div>
   </div>
 
-  <!-- MODAL: DETALLE DISPOSITIVO -->
+  <!-- MODAL DETALLE -->
   <div class="modal-overlay" id="modalDetalle">
     <div class="modal">
       <div class="modal-title">
         <span>Detalle del dispositivo</span>
         <button class="modal-close" onclick="cerrarModalDetalle()">✕</button>
       </div>
-
       <div class="detalle-header">
         <div class="detalle-id" id="detId">—</div>
         <div class="detalle-info" id="detInfo">—</div>
       </div>
-
       <div class="detalle-section">
         <div class="detalle-section-title">Estado</div>
         <div class="estado-btns">
@@ -232,7 +206,6 @@
           <button class="estado-btn estado-btn-baja" onclick="cambiarEstado('baja')" id="btnEstBaja">✕ Baja</button>
         </div>
       </div>
-
       <div class="detalle-section">
         <div class="detalle-section-title">Datos</div>
         <div class="form-row">
@@ -251,11 +224,10 @@
         </div>
         <button class="btn-primary" style="margin-top:8px;" onclick="guardarCambios()">Guardar cambios</button>
       </div>
-
       <div class="detalle-section">
         <div class="detalle-section-title">Historial de reparaciones</div>
         <div class="rep-list" id="detReparaciones">
-          <div style="text-align:center; padding:16px; opacity:0.4; font-size:13px;">Sin reparaciones registradas</div>
+          <div style="text-align:center;padding:16px;opacity:0.4;font-size:13px;">Sin reparaciones registradas</div>
         </div>
       </div>
     </div>
@@ -269,6 +241,8 @@
       'https://raoxkjnwrccoxjcipfpv.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzMxNzgsImV4cCI6MjA5MTgwOTE3OH0.dlPG4hpA-ypmGkqrP0ohaiOfMtXq5dpVmV7QNOt7_Qs'
     );
+    // Helper schema irc — igual que en reparacion.html
+    const irc = () => supabase.schema('irc');
   </script>
   <script src="auth.js"></script>
   <script>
@@ -276,26 +250,24 @@
     let filtroEstado = 'todos';
     let dispositivoActual = null;
 
-    // Detectar si venimos de reparacion
+    // Volver a reparacion si venimos de ahí
     const volverDesde = sessionStorage.getItem('irc_volver_desde');
     if (volverDesde === 'reparacion') {
       document.getElementById('btnVolver').href = 'reparacion.html';
       sessionStorage.removeItem('irc_volver_desde');
     }
 
-    // ─── CARGAR DATOS ───
     async function cargarDispositivos() {
-      const { data, error } = await supabase
-        supabase.schema('irc').from('dispositivos')
+      const { data, error } = await irc()
+        .from('dispositivos')
         .select('*')
         .order('created_at', { ascending: false });
 
       if (error) {
         document.getElementById('tablaBody').innerHTML =
-          `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">Error al cargar: ${error.message}</div></div>`;
+          `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">Error: ${error.message}</div></div>`;
         return;
       }
-
       dispositivos = data || [];
       actualizarStats();
       renderTabla();
@@ -321,13 +293,8 @@
       });
 
       const body = document.getElementById('tablaBody');
-
       if (filtrados.length === 0) {
-        body.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-icon">🖥️</div>
-            <div class="empty-text">No se encontraron dispositivos</div>
-          </div>`;
+        body.innerHTML = `<div class="empty-state"><div class="empty-icon">🖥️</div><div class="empty-text">No se encontraron dispositivos</div></div>`;
         return;
       }
 
@@ -359,10 +326,8 @@
 
     function filtrar() { renderTabla(); }
 
-    // ─── MODAL NUEVO ───
     function abrirModalNuevo() {
       document.getElementById('modalNuevo').classList.add('show');
-      document.getElementById('nuevoCat').focus();
     }
 
     function cerrarModalNuevo() {
@@ -375,17 +340,12 @@
       document.getElementById('nuevoError').style.display = 'none';
     }
 
-    // Preview del ID
     document.addEventListener('input', e => {
       if (e.target.id === 'nuevoCat' || e.target.id === 'nuevoNum') {
         const cat = document.getElementById('nuevoCat').value;
         const num = document.getElementById('nuevoNum').value.trim();
-        if (cat && num) {
-          document.getElementById('nuevoIdPreview').textContent =
-            `ID: ${cat}-${num.padStart(3,'0')}`;
-        } else {
-          document.getElementById('nuevoIdPreview').textContent = '';
-        }
+        document.getElementById('nuevoIdPreview').textContent =
+          cat && num ? `ID: ${cat}-${num.padStart(3,'0')}` : '';
       }
     });
 
@@ -406,18 +366,14 @@
 
       const id = `${cat}-${num.padStart(3,'0')}`;
 
-      // Verificar si ya existe
-      const { data: existe } = await supabase
-        supabase.schema('irc').from('dispositivos').select('id').eq('id', id).maybeSingle();
-
+      const { data: existe } = await irc().from('dispositivos').select('id').eq('id', id).maybeSingle();
       if (existe) {
         errEl.textContent = `El dispositivo ${id} ya está registrado`;
         errEl.style.display = 'block';
         return;
       }
 
-      const { error } = await supabase
-        supabase.schema('irc').from('dispositivos').insert({
+      const { error } = await irc().from('dispositivos').insert({
         id, categoria: cat, numero: num.padStart(3,'0'),
         nombre: nombre || id, ubicacion: ubicacion || 'Sin asignar',
         estado, notas
@@ -434,7 +390,6 @@
       cargarDispositivos();
     }
 
-    // ─── MODAL DETALLE ───
     async function abrirDetalle(id) {
       dispositivoActual = dispositivos.find(d => d.id === id);
       if (!dispositivoActual) return;
@@ -447,15 +402,12 @@
       document.getElementById('detUbicacion').value = d.ubicacion || '';
       document.getElementById('detNotas').value = d.notas || '';
 
-      // Marcar estado activo
-      ['op','rep','baja'].forEach(x => {
-        document.getElementById('btnEst' + (x === 'op' ? 'Op' : x === 'rep' ? 'Rep' : 'Baja')).classList.remove('active');
-      });
       const mapaBtn = { operativo: 'btnEstOp', en_reparacion: 'btnEstRep', baja: 'btnEstBaja' };
+      Object.values(mapaBtn).forEach(btnId => document.getElementById(btnId).classList.remove('active'));
       if (mapaBtn[d.estado]) document.getElementById(mapaBtn[d.estado]).classList.add('active');
 
-      // Cargar reparaciones
-      const { data: reps } = await supabase
+      // Cargar reparaciones del schema irc
+      const { data: reps } = await irc()
         .from('reparaciones')
         .select('id, estado, created_at, diagnostico')
         .eq('equipo_id', id)
@@ -489,9 +441,8 @@
 
     async function cambiarEstado(nuevoEstado) {
       if (!dispositivoActual) return;
-
-      const { error } = await supabase
-        supabase.schema('irc').from('dispositivos')
+      const { error } = await irc()
+        .from('dispositivos')
         .update({ estado: nuevoEstado, updated_at: new Date().toISOString() })
         .eq('id', dispositivoActual.id);
 
@@ -501,7 +452,6 @@
       const idx = dispositivos.findIndex(d => d.id === dispositivoActual.id);
       if (idx >= 0) dispositivos[idx].estado = nuevoEstado;
 
-      // Actualizar botones activos
       const mapaBtn = { operativo: 'btnEstOp', en_reparacion: 'btnEstRep', baja: 'btnEstBaja' };
       Object.values(mapaBtn).forEach(id => document.getElementById(id).classList.remove('active'));
       if (mapaBtn[nuevoEstado]) document.getElementById(mapaBtn[nuevoEstado]).classList.add('active');
@@ -513,22 +463,19 @@
 
     async function guardarCambios() {
       if (!dispositivoActual) return;
-
       const nombre = document.getElementById('detNombre').value.trim();
       const ubicacion = document.getElementById('detUbicacion').value.trim();
       const notas = document.getElementById('detNotas').value.trim();
 
-      const { error } = await supabase
-        supabase.schema('irc').from('dispositivos')
+      const { error } = await irc()
+        .from('dispositivos')
         .update({ nombre, ubicacion, notas, updated_at: new Date().toISOString() })
         .eq('id', dispositivoActual.id);
 
       if (error) { showToast('Error: ' + error.message, true); return; }
 
-      // Actualizar local
       const idx = dispositivos.findIndex(d => d.id === dispositivoActual.id);
       if (idx >= 0) { dispositivos[idx].nombre = nombre; dispositivos[idx].ubicacion = ubicacion; }
-
       document.getElementById('detInfo').textContent =
         [nombre, ubicacion].filter(Boolean).join(' · ') || 'Sin información adicional';
 
@@ -536,7 +483,6 @@
       showToast('✓ Cambios guardados');
     }
 
-    // ─── UTILS ───
     function showToast(msg, isError = false) {
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -545,7 +491,6 @@
       setTimeout(() => t.classList.remove('show'), 3500);
     }
 
-    // Cerrar modales al hacer click fuera
     document.getElementById('modalNuevo').addEventListener('click', e => {
       if (e.target === e.currentTarget) cerrarModalNuevo();
     });
@@ -553,7 +498,6 @@
       if (e.target === e.currentTarget) cerrarModalDetalle();
     });
 
-    // ─── INIT ───
     cargarDispositivos();
   </script>
 </body>
