@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IRC — InOut Repair Center</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -190,7 +189,6 @@
     async function checkSession() {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        // Ya está logueado, redirigir
         await verifyAndRedirect(session.user);
       }
     }
@@ -212,7 +210,6 @@
       errorEl.style.display = 'none';
 
       try {
-        // 1. Login con Supabase Auth
         const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
           email,
           password
@@ -222,7 +219,6 @@
           throw new Error('Email o contraseña incorrectos');
         }
 
-        // 2. Verificar que el usuario esté en la tabla empleados y tenga rol IRC
         await verifyAndRedirect(authData.user);
 
       } catch (err) {
@@ -234,28 +230,26 @@
 
     async function verifyAndRedirect(user) {
       try {
-        // Buscar en empleados por auth_user_id
-        const { data: empleado, error: empError } = await supabase
+        // Buscar empleado por auth_user_id
+        let { data: empleado, error: empError } = await supabase
           .from('empleados')
           .select('*')
           .eq('auth_user_id', user.id)
-          .eq('activo', true)
-          .single();
+          .maybeSingle();
 
-        if (empError || !empleado) {
-          // Fallback: buscar por email
+        // Si no existe, buscar por email
+        if (!empleado) {
           const { data: empleadoByEmail } = await supabase
             .from('empleados')
             .select('*')
             .eq('email', user.email)
-            .eq('activo', true)
-            .single();
+            .maybeSingle();
 
           if (!empleadoByEmail) {
             throw new Error('Usuario no autorizado para IRC');
           }
 
-          // Si encontramos por email, actualizar auth_user_id
+          // Actualizar auth_user_id
           await supabase
             .from('empleados')
             .update({ auth_user_id: user.id })
@@ -264,13 +258,13 @@
           empleado = empleadoByEmail;
         }
 
-        // Verificar que tenga rol IRC o sea superadmin
+        // Verificar acceso IRC (SuperAdmin SIEMPRE tiene acceso)
         if (!empleado.irc_rol && empleado.role !== 'superadmin') {
           await supabase.auth.signOut();
           throw new Error('No tienes acceso al sistema IRC');
         }
 
-        // Registrar historial de acceso
+        // Registrar historial
         await supabase.from('irc.historial').insert({
           tipo: 'login',
           usuario_id: empleado.id,
@@ -292,7 +286,7 @@
         localStorage.setItem('irc_user_nombre', `${empleado.nombre} ${empleado.apellido || ''}`);
         localStorage.setItem('irc_user_email', user.email);
 
-        // Redirigir según rol
+        // Redirigir
         if (empleado.irc_rol === 'almacen') {
           window.location.href = 'almacen.html';
         } else {
@@ -315,7 +309,6 @@
       }, 5000);
     }
 
-    // Auto-focus en email al cargar
     document.getElementById('email').focus();
   </script>
 </body>
