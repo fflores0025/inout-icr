@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRC — Mis Pedidos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+  <style>
+    :root { --a1: #c8ff00; --a2: #ff3cac; --a3: #00d4ff; --bg: #07070f; --bg2: #0f0f1a; --bg3: #161622; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: white; min-height: 100vh; padding: 20px; }
+
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .logo { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--a1); }
+    .btn-back { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-family: 'DM Sans', sans-serif; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-back:hover { border-color: var(--a1); color: var(--a1); }
+
+    /* STATS */
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin-bottom: 28px; }
+    .stat-card { background: var(--bg2); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 16px 20px; }
+    .stat-num { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; }
+    .stat-label { font-size: 12px; opacity: 0.5; margin-top: 2px; }
+    .stat-pendiente .stat-num { color: #ffd60a; }
+    .stat-preparando .stat-num { color: var(--a3); }
+    .stat-listo .stat-num { color: var(--a1); }
+    .stat-entregado .stat-num { color: rgba(255,255,255,0.4); }
+
+    /* FILTROS */
+    .toolbar { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+    .filter-btn { background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 8px 16px; font-size: 13px; color: white; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.15s; white-space: nowrap; }
+    .filter-btn:hover { border-color: rgba(255,255,255,0.3); }
+    .filter-btn.active { border-color: var(--a1); color: var(--a1); background: rgba(200,255,0,0.06); }
+
+    /* PEDIDOS GRID */
+    .pedidos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+
+    /* PEDIDO CARD */
+    .pedido-card { background: var(--bg2); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 20px; transition: all 0.2s; cursor: pointer; }
+    .pedido-card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
+    .pedido-card.urgente { border-color: rgba(255,60,172,0.3); }
+    .pedido-card.listo { border-color: rgba(200,255,0,0.3); background: rgba(200,255,0,0.03); }
+    .pedido-card.entregado { opacity: 0.5; }
+
+    .pedido-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+    .pedido-id { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--a3); }
+    .pedido-fecha { font-size: 11px; opacity: 0.4; }
+
+    .pedido-estado-row { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+    .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+    .badge-pendiente { background: rgba(255,214,10,0.15); color: #ffd60a; }
+    .badge-preparando { background: rgba(0,212,255,0.12); color: var(--a3); }
+    .badge-listo { background: rgba(200,255,0,0.12); color: var(--a1); }
+    .badge-entregado { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
+    .badge-cancelado { background: rgba(255,60,172,0.12); color: var(--a2); }
+    .badge-urgente { background: rgba(255,60,172,0.15); color: var(--a2); }
+    .badge-normal { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.4); }
+
+    .pedido-mesa { font-size: 12px; opacity: 0.5; }
+
+    /* ITEMS */
+    .pedido-items { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .pedido-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+    .pedido-item-check { width: 16px; height: 16px; border-radius: 3px; border: 1.5px solid rgba(255,255,255,0.2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; }
+    .pedido-item-check.done { background: var(--a1); border-color: var(--a1); color: var(--bg); }
+    .pedido-item-nombre { flex: 1; }
+    .pedido-item-nombre.done { text-decoration: line-through; opacity: 0.4; }
+    .pedido-item-qty { font-size: 11px; background: rgba(255,255,255,0.08); padding: 1px 7px; border-radius: 8px; }
+
+    /* NOTAS */
+    .pedido-notas { font-size: 12px; opacity: 0.5; background: rgba(255,255,255,0.04); border-radius: 6px; padding: 8px 10px; margin-bottom: 12px; }
+
+    /* PROGRESS */
+    .progress-wrap { height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; margin-bottom: 14px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--a1); border-radius: 2px; transition: width 0.3s; }
+
+    /* ACCIONES */
+    .pedido-actions { display: flex; gap: 8px; }
+    .btn-accion { flex: 1; padding: 8px; border-radius: 7px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; border: none; transition: all 0.15s; }
+    .btn-recibido { background: rgba(200,255,0,0.15); color: var(--a1); }
+    .btn-recibido:hover { background: rgba(200,255,0,0.25); }
+    .btn-cancelar { background: rgba(255,60,172,0.1); color: var(--a2); }
+    .btn-cancelar:hover { background: rgba(255,60,172,0.2); }
+    .btn-ver { background: rgba(255,255,255,0.08); color: white; }
+    .btn-ver:hover { background: rgba(255,255,255,0.14); }
+
+    /* VACÍO */
+    .empty-state { text-align: center; padding: 60px 20px; opacity: 0.4; grid-column: 1/-1; }
+    .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-text { font-size: 15px; }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 100; display: none; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: var(--bg2); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .modal-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
+    .modal-close { background: transparent; border: none; color: rgba(255,255,255,0.4); font-size: 20px; cursor: pointer; }
+    .modal-sub { font-size: 13px; opacity: 0.5; margin-bottom: 20px; font-family: 'DM Mono', monospace; }
+    .modal-items { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .modal-item { display: flex; align-items: center; gap: 12px; background: var(--bg3); border-radius: 8px; padding: 12px 14px; cursor: pointer; user-select: none; transition: all 0.15s; }
+    .modal-item:hover { background: rgba(255,255,255,0.06); }
+    .modal-item.done { background: rgba(200,255,0,0.05); }
+    .modal-item.done .modal-item-nombre { opacity: 0.5; text-decoration: line-through; }
+    .modal-item-check { width: 20px; height: 20px; border-radius: 4px; border: 2px solid rgba(255,255,255,0.2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 11px; transition: all 0.15s; }
+    .modal-item.done .modal-item-check { background: var(--a1); border-color: var(--a1); color: var(--bg); }
+    .modal-item-nombre { flex: 1; font-size: 14px; }
+    .modal-item-qty { font-size: 12px; background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 8px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 4px; }
+    .btn-primary { background: var(--a1); color: var(--bg); border: none; border-radius: 8px; padding: 11px 24px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+    .btn-secondary { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; padding: 11px 18px; font-size: 14px; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+    .loading { text-align: center; padding: 40px; opacity: 0.4; font-size: 14px; grid-column: 1/-1; }
+
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--bg2); border: 1px solid rgba(200,255,0,0.3); color: white; padding: 14px 20px; border-radius: 10px; font-size: 14px; transform: translateY(80px); opacity: 0; transition: all 0.3s; z-index: 999; max-width: 360px; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.error { border-color: rgba(255,60,172,0.4); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <a href="escritorio.html" class="btn-back">← Volver</a>
+      <div class="logo">Mis Pedidos</div>
+    </div>
+    <div style="font-size:13px; opacity:0.5;" id="headerUser"></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat-card stat-pendiente"><div class="stat-num" id="statPendiente">—</div><div class="stat-label">Pendientes</div></div>
+    <div class="stat-card stat-preparando"><div class="stat-num" id="statPreparando">—</div><div class="stat-label">Preparando</div></div>
+    <div class="stat-card stat-listo"><div class="stat-num" id="statListo">—</div><div class="stat-label">Listos</div></div>
+    <div class="stat-card stat-entregado"><div class="stat-num" id="statEntregado">—</div><div class="stat-label">Entregados</div></div>
+  </div>
+
+  <!-- FILTROS -->
+  <div class="toolbar">
+    <button class="filter-btn active" onclick="setFiltro(this,'todos')">Todos</button>
+    <button class="filter-btn" onclick="setFiltro(this,'pendiente')">Pendientes</button>
+    <button class="filter-btn" onclick="setFiltro(this,'preparando')">Preparando</button>
+    <button class="filter-btn" onclick="setFiltro(this,'listo')">Listos ✓</button>
+    <button class="filter-btn" onclick="setFiltro(this,'entregado')">Entregados</button>
+  </div>
+
+  <!-- PEDIDOS -->
+  <div class="pedidos-grid" id="pedidosGrid">
+    <div class="loading">Cargando pedidos...</div>
+  </div>
+
+  <!-- MODAL DETALLE PEDIDO -->
+  <div class="modal-overlay" id="modalPedido">
+    <div class="modal">
+      <div class="modal-title">
+        <span>Detalle del pedido</span>
+        <button class="modal-close" onclick="cerrarModal()">✕</button>
+      </div>
+      <div class="modal-sub" id="modalPedidoId">—</div>
+
+      <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;" id="modalBadges"></div>
+
+      <div style="font-size:12px; opacity:0.4; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px;">
+        Materiales — marca los recibidos
+      </div>
+      <div class="modal-items" id="modalItems"></div>
+
+      <div style="height:4px; background:rgba(255,255,255,0.06); border-radius:2px; margin-bottom:16px; overflow:hidden;">
+        <div class="progress-fill" id="modalProgress" style="width:0%"></div>
+      </div>
+
+      <div id="modalNotasWrap" style="display:none; margin-bottom:16px;">
+        <div style="font-size:12px; opacity:0.4; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px;">Notas</div>
+        <div style="font-size:13px; opacity:0.7; background:var(--bg3); border-radius:6px; padding:8px 10px;" id="modalNotas"></div>
+      </div>
+
+      <div class="modal-actions" id="modalAcciones"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    var supabase = window.supabase.createClient(
+      'https://raoxkjnwrccoxjcipfpv.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzMxNzgsImV4cCI6MjA5MTgwOTE3OH0.dlPG4hpA-ypmGkqrP0ohaiOfMtXq5dpVmV7QNOt7_Qs'
+    );
+    const irc = () => supabase;
+  </script>
+  <script src="auth.js"></script>
+  <script>
+    const tecnicoId = localStorage.getItem('irc_user_id');
+    const tecnicoNombre = localStorage.getItem('irc_user_nombre');
+    document.getElementById('headerUser').textContent = tecnicoNombre || '';
+
+    let pedidos = [];
+    let filtroActual = 'todos';
+    let pedidoActual = null;
+    let itemsModal = [];
+
+    // ─── CARGAR ───
+    async function cargarPedidos() {
+      const { data, error } = await irc()
+        .from('pedidos')
+        .select('*')
+        .eq('tecnico_id', tecnicoId)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        document.getElementById('pedidosGrid').innerHTML =
+          `<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">Error: ${error.message}</div></div>`;
+        return;
+      }
+
+      pedidos = data || [];
+      actualizarStats();
+      renderPedidos();
+    }
+
+    function actualizarStats() {
+      document.getElementById('statPendiente').textContent = pedidos.filter(p => p.estado === 'pendiente').length;
+      document.getElementById('statPreparando').textContent = pedidos.filter(p => p.estado === 'preparando').length;
+      document.getElementById('statListo').textContent = pedidos.filter(p => p.estado === 'listo').length;
+      document.getElementById('statEntregado').textContent = pedidos.filter(p => p.estado === 'entregado').length;
+    }
+
+    function renderPedidos() {
+      const filtrados = filtroActual === 'todos'
+        ? pedidos
+        : pedidos.filter(p => p.estado === filtroActual);
+
+      const grid = document.getElementById('pedidosGrid');
+
+      if (filtrados.length === 0) {
+        grid.innerHTML = `<div class="empty-state"><div class="empty-icon">📦</div><div class="empty-text">No hay pedidos ${filtroActual !== 'todos' ? `en estado "${filtroActual}"` : ''}</div></div>`;
+        return;
+      }
+
+      const badgeClass = { pendiente: 'badge-pendiente', preparando: 'badge-preparando', listo: 'badge-listo', entregado: 'badge-entregado', cancelado: 'badge-cancelado' };
+      const estadoLabel = { pendiente: '⏳ Pendiente', preparando: '🔄 Preparando', listo: '✓ Listo', entregado: '📦 Entregado', cancelado: '✕ Cancelado' };
+
+      grid.innerHTML = filtrados.map(p => {
+        const items = p.items || [];
+        const entregados = items.filter(i => i.entregado).length;
+        const pct = items.length > 0 ? Math.round((entregados / items.length) * 100) : 0;
+        const fecha = new Date(p.created_at).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+
+        return `
+          <div class="pedido-card ${p.prioridad === 'urgente' ? 'urgente' : ''} ${p.estado === 'listo' ? 'listo' : ''} ${p.estado === 'entregado' ? 'entregado' : ''}"
+               onclick="abrirModal('${p.id}')">
+            <div class="pedido-header">
+              <div class="pedido-id">${p.id}</div>
+              <div class="pedido-fecha">${fecha}</div>
+            </div>
+            <div class="pedido-estado-row">
+              <span class="badge ${badgeClass[p.estado] || ''}">${estadoLabel[p.estado] || p.estado}</span>
+              <span class="badge ${p.prioridad === 'urgente' ? 'badge-urgente' : 'badge-normal'}">${p.prioridad === 'urgente' ? '🔴 Urgente' : 'Normal'}</span>
+              ${p.mesa ? `<span class="pedido-mesa">${p.mesa}</span>` : ''}
+            </div>
+            <div class="progress-wrap">
+              <div class="progress-fill" style="width:${pct}%"></div>
+            </div>
+            <div class="pedido-items">
+              ${items.slice(0, 4).map(i => `
+                <div class="pedido-item">
+                  <div class="pedido-item-check ${i.entregado ? 'done' : ''}">
+                    ${i.entregado ? '✓' : ''}
+                  </div>
+                  <span class="pedido-item-nombre ${i.entregado ? 'done' : ''}">${i.producto_nombre || i.nombre || '—'}</span>
+                  <span class="pedido-item-qty">×${i.cantidad}</span>
+                </div>`).join('')}
+              ${items.length > 4 ? `<div style="font-size:12px; opacity:0.4;">+ ${items.length - 4} más...</div>` : ''}
+            </div>
+            ${p.notas ? `<div class="pedido-notas">${p.notas}</div>` : ''}
+            <div class="pedido-actions" onclick="event.stopPropagation()">
+              ${p.estado === 'listo' ? `<button class="btn-accion btn-recibido" onclick="marcarEntregado('${p.id}')">✓ Confirmar recepción</button>` : ''}
+              ${['pendiente','preparando','listo'].includes(p.estado) ? `<button class="btn-accion btn-cancelar" onclick="cancelarPedido('${p.id}')">Cancelar</button>` : ''}
+              <button class="btn-accion btn-ver" onclick="abrirModal('${p.id}')">Ver detalle</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function setFiltro(el, filtro) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      filtroActual = filtro;
+      renderPedidos();
+    }
+
+    // ─── MODAL ───
+    function abrirModal(id) {
+      pedidoActual = pedidos.find(p => p.id === id);
+      if (!pedidoActual) return;
+
+      const p = pedidoActual;
+      itemsModal = JSON.parse(JSON.stringify(p.items || [])); // copia profunda
+
+      document.getElementById('modalPedidoId').textContent = `${p.id} · ${p.mesa || 'Sin mesa'} · ${new Date(p.created_at).toLocaleDateString('es-ES')}`;
+
+      const badgeClass = { pendiente: 'badge-pendiente', preparando: 'badge-preparando', listo: 'badge-listo', entregado: 'badge-entregado', cancelado: 'badge-cancelado' };
+      const estadoLabel = { pendiente: '⏳ Pendiente', preparando: '🔄 Preparando', listo: '✓ Listo para recoger', entregado: '📦 Entregado', cancelado: '✕ Cancelado' };
+
+      document.getElementById('modalBadges').innerHTML = `
+        <span class="badge ${badgeClass[p.estado] || ''}">${estadoLabel[p.estado] || p.estado}</span>
+        <span class="badge ${p.prioridad === 'urgente' ? 'badge-urgente' : 'badge-normal'}">${p.prioridad === 'urgente' ? '🔴 Urgente' : 'Normal'}</span>
+      `;
+
+      if (p.notas) {
+        document.getElementById('modalNotasWrap').style.display = 'block';
+        document.getElementById('modalNotas').textContent = p.notas;
+      } else {
+        document.getElementById('modalNotasWrap').style.display = 'none';
+      }
+
+      renderModalItems();
+
+      // Acciones
+      const accEl = document.getElementById('modalAcciones');
+      accEl.innerHTML = '';
+      if (p.estado === 'listo') {
+        accEl.innerHTML = `
+          <button class="btn-primary" onclick="marcarEntregado('${p.id}'); cerrarModal()">✓ Confirmar recepción</button>
+          <button class="btn-secondary" onclick="cerrarModal()">Cerrar</button>`;
+      } else if (['pendiente','preparando'].includes(p.estado)) {
+        accEl.innerHTML = `
+          <button class="btn-secondary" onclick="cancelarPedido('${p.id}'); cerrarModal()">Cancelar pedido</button>
+          <button class="btn-secondary" onclick="cerrarModal()">Cerrar</button>`;
+      } else {
+        accEl.innerHTML = `<button class="btn-secondary" onclick="cerrarModal()">Cerrar</button>`;
+      }
+
+      document.getElementById('modalPedido').classList.add('show');
+    }
+
+    function renderModalItems() {
+      const entregados = itemsModal.filter(i => i.entregado).length;
+      const pct = itemsModal.length > 0 ? Math.round((entregados / itemsModal.length) * 100) : 0;
+      document.getElementById('modalProgress').style.width = pct + '%';
+
+      document.getElementById('modalItems').innerHTML = itemsModal.map((item, i) => `
+        <div class="modal-item ${item.entregado ? 'done' : ''}" onclick="toggleItem(${i})">
+          <div class="modal-item-check">${item.entregado ? '✓' : ''}</div>
+          <span class="modal-item-nombre">${item.producto_nombre || item.nombre || '—'}</span>
+          <span class="modal-item-qty">×${item.cantidad}</span>
+        </div>`).join('');
+    }
+
+    function toggleItem(i) {
+      if (!pedidoActual || pedidoActual.estado === 'entregado') return;
+      itemsModal[i].entregado = !itemsModal[i].entregado;
+      renderModalItems();
+      // Guardar cambios en items
+      guardarItems();
+    }
+
+    async function guardarItems() {
+      if (!pedidoActual) return;
+      await irc()
+        .from('pedidos')
+        .update({ items: itemsModal })
+        .eq('id', pedidoActual.id);
+      // Actualizar local
+      const idx = pedidos.findIndex(p => p.id === pedidoActual.id);
+      if (idx >= 0) pedidos[idx].items = itemsModal;
+      renderPedidos();
+    }
+
+    function cerrarModal() {
+      document.getElementById('modalPedido').classList.remove('show');
+      pedidoActual = null;
+      itemsModal = [];
+    }
+
+    // ─── ACCIONES ───
+    async function marcarEntregado(id) {
+      const { error } = await irc()
+        .from('pedidos')
+        .update({ estado: 'entregado', entregado_at: new Date().toISOString() })
+        .eq('id', id);
+      if (error) { showToast('Error: ' + error.message, true); return; }
+      const idx = pedidos.findIndex(p => p.id === id);
+      if (idx >= 0) pedidos[idx].estado = 'entregado';
+      actualizarStats();
+      renderPedidos();
+      showToast('✓ Pedido confirmado como recibido');
+    }
+
+    async function cancelarPedido(id) {
+      if (!confirm('¿Cancelar este pedido?')) return;
+      const { error } = await irc()
+        .from('pedidos')
+        .update({ estado: 'cancelado' })
+        .eq('id', id);
+      if (error) { showToast('Error: ' + error.message, true); return; }
+      const idx = pedidos.findIndex(p => p.id === id);
+      if (idx >= 0) pedidos[idx].estado = 'cancelado';
+      actualizarStats();
+      renderPedidos();
+      showToast('Pedido cancelado');
+    }
+
+    // ─── UTILS ───
+    function showToast(msg, isError = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast' + (isError ? ' error' : '');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3500);
+    }
+
+    document.getElementById('modalPedido').addEventListener('click', e => {
+      if (e.target === e.currentTarget) cerrarModal();
+    });
+
+    // ─── REALTIME — actualizar cuando almacén cambia el estado ───
+    supabase
+      .channel('pedidos-changes')
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'pedidos',
+        filter: `tecnico_id=eq.${tecnicoId}`
+      }, payload => {
+        const idx = pedidos.findIndex(p => p.id === payload.new.id);
+        if (idx >= 0) {
+          const estadoAntes = pedidos[idx].estado;
+          pedidos[idx] = payload.new;
+          // Notificar si el pedido está listo
+          if (estadoAntes !== 'listo' && payload.new.estado === 'listo') {
+            showToast(`🔔 Pedido ${payload.new.id} listo para recoger`);
+          }
+        } else {
+          pedidos.unshift(payload.new);
+        }
+        actualizarStats();
+        renderPedidos();
+      })
+      .subscribe();
+
+    // ─── INIT ───
+    cargarPedidos();
+  </script>
+</body>
+</html>
