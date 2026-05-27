@@ -336,9 +336,17 @@
       const entregados = itemsModal.filter(i => i.entregado).length;
       const pct = itemsModal.length > 0 ? Math.round((entregados / itemsModal.length) * 100) : 0;
       document.getElementById('modalProgress').style.width = pct + '%';
-
+      
+      // Mostrar aviso si está cancelado/entregado
+      const cerrado = ['cancelado', 'entregado'].includes(pedidoActual?.estado);
+      if (cerrado) {
+      document.getElementById('modalProgress').parentElement.style.display = 'none';
+      }
+      
       document.getElementById('modalItems').innerHTML = itemsModal.map((item, i) => `
-        <div class="modal-item ${item.entregado ? 'done' : ''}" onclick="toggleItem(${i})">
+        <div class="modal-item ${item.entregado ? 'done' : ''}" 
+     onclick="toggleItem(${i})" 
+     style="${['cancelado','entregado'].includes(pedidoActual?.estado) ? 'cursor:default;opacity:0.6;' : ''}">
           <div class="modal-item-check">${item.entregado ? '✓' : ''}</div>
           <span class="modal-item-nombre">${item.producto_nombre || item.nombre || '—'}</span>
           <span class="modal-item-qty">×${item.cantidad}</span>
