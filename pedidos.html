@@ -346,7 +346,7 @@
     }
 
     function toggleItem(i) {
-      if (!pedidoActual || pedidoActual.estado === 'entregado') return;
+      if (!pedidoActual || ['entregado', 'cancelado'].includes(pedidoActual.estado)) return;
       itemsModal[i].entregado = !itemsModal[i].entregado;
       renderModalItems();
       // Guardar cambios en items
