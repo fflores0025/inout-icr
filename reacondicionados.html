@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IRC — Reacondicionados</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <style>
+    :root { --a1:#c8ff00; --a2:#ff3cac; --a3:#00d4ff; --bg:#07070f; --bg2:#0f0f1a; --bg3:#16161f; }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:#fff;min-height:100vh;}
+    .header{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;background:var(--bg2);border-bottom:1px solid #ffffff10;}
+    .header-left{display:flex;align-items:center;gap:12px;}
+    .back-btn{background:none;border:1px solid #ffffff20;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;transition:border-color .2s;}
+    .back-btn:hover{border-color:#ffffff50;}
+    .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:var(--a1);}
+    .user-info{display:flex;align-items:center;gap:12px;}
+    .user-name{font-size:14px;color:#ffffff80;}
+    .btn-logout{background:none;border:1px solid #ffffff20;color:#ffffff60;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;transition:all .2s;}
+    .btn-logout:hover{border-color:var(--a2);color:var(--a2);}
+    .main{max-width:900px;margin:0 auto;padding:24px 16px;}
+    h1{font-family:'Syne',sans-serif;font-size:22px;margin-bottom:4px;}
+    .subtitle{color:#ffffff50;font-size:13px;margin-bottom:24px;}
+    .toolbar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;align-items:center;}
+    .filter-tabs{display:flex;gap:6px;flex:1;}
+    .tab{padding:7px 14px;border-radius:20px;border:1px solid #ffffff20;background:none;color:#ffffff60;font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s;}
+    .tab.active{background:var(--a1);border-color:var(--a1);color:#07070f;font-weight:600;}
+    .tab:hover:not(.active){border-color:#ffffff40;color:#fff;}
+    .count-badge{display:inline-block;background:#ffffff15;padding:1px 7px;border-radius:10px;font-size:11px;margin-left:4px;}
+    .search-input{background:var(--bg3);border:1px solid #ffffff15;color:#fff;padding:8px 14px;border-radius:10px;font-size:13px;font-family:inherit;width:220px;}
+    .search-input:focus{outline:none;border-color:var(--a3);}
+    .search-input::placeholder{color:#ffffff30;}
+    .card-grid{display:flex;flex-direction:column;gap:10px;}
+    .card{background:var(--bg2);border:1px solid #ffffff10;border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px;transition:border-color .2s;}
+    .card:hover{border-color:#ffffff25;}
+    .card-icon{font-size:22px;min-width:36px;text-align:center;margin-top:2px;}
+    .card-body{flex:1;min-width:0;}
+    .card-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+    .card-id{font-family:'DM Mono','Courier New',monospace;font-size:11px;color:#ffffff40;background:#ffffff08;padding:2px 7px;border-radius:5px;}
+    .card-equipo{font-weight:600;font-size:15px;}
+    .estado-badge{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+    .estado-pendiente{background:#ff9f0a20;color:#ff9f0a;border:1px solid #ff9f0a40;}
+    .estado-revisando{background:#00d4ff20;color:#00d4ff;border:1px solid #00d4ff40;}
+    .estado-reparado{background:#c8ff0020;color:#c8ff00;border:1px solid #c8ff0040;}
+    .estado-descartado{background:#ffffff15;color:#ffffff50;border:1px solid #ffffff20;}
+    .card-meta{display:flex;gap:16px;font-size:12px;color:#ffffff50;flex-wrap:wrap;margin-bottom:8px;}
+    .card-error{font-size:13px;color:#ffffff80;background:#ffffff08;padding:6px 10px;border-radius:8px;margin-top:4px;}
+    .card-notas{font-size:12px;color:#ffffff50;margin-top:6px;font-style:italic;}
+    .card-actions{display:flex;flex-direction:column;gap:8px;min-width:140px;align-items:flex-end;}
+    .btn-action{padding:7px 14px;border-radius:8px;font-size:12px;font-family:inherit;cursor:pointer;border:none;font-weight:600;transition:all .2s;width:100%;}
+    .btn-revisar{background:#00d4ff20;color:#00d4ff;border:1px solid #00d4ff40;}
+    .btn-revisar:hover{background:#00d4ff;color:#07070f;}
+    .btn-reparado{background:#c8ff0020;color:#c8ff00;border:1px solid #c8ff0040;}
+    .btn-reparado:hover{background:#c8ff00;color:#07070f;}
+    .btn-descartar{background:#ff3cac10;color:#ff3cac;border:1px solid #ff3cac30;}
+    .btn-descartar:hover{background:#ff3cac;color:#fff;}
+    .btn-revertir{background:#ffffff10;color:#ffffff60;border:1px solid #ffffff20;font-weight:400;}
+    .btn-revertir:hover{border-color:#ffffff40;color:#fff;}
+    .empty{text-align:center;padding:60px 20px;color:#ffffff30;}
+    .empty-icon{font-size:40px;margin-bottom:12px;}
+    .loading{text-align:center;padding:60px;color:#ffffff40;font-size:14px;}
+    .toast{position:fixed;bottom:24px;right:24px;background:var(--bg3);border:1px solid #ffffff20;border-radius:12px;padding:12px 18px;font-size:14px;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:999;}
+    .toast.show{opacity:1;transform:translateY(0);}
+    .toast.ok{border-color:var(--a1);color:var(--a1);}
+    .toast.err{border-color:var(--a2);color:var(--a2);}
+    /* Modal detalle */
+    .modal-bg{position:fixed;inset:0;background:#00000090;display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
+    .modal-bg.open{opacity:1;pointer-events:all;}
+    .modal{background:var(--bg2);border:1px solid #ffffff15;border-radius:16px;padding:24px;width:90%;max-width:480px;}
+    .modal-title{font-family:'Syne',sans-serif;font-size:18px;margin-bottom:16px;}
+    .modal-field{margin-bottom:14px;}
+    .modal-label{font-size:11px;color:#ffffff50;text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;}
+    .modal-value{font-size:14px;color:#fff;}
+    textarea.modal-input{width:100%;background:var(--bg3);border:1px solid #ffffff20;color:#fff;padding:10px;border-radius:8px;font-size:13px;font-family:inherit;resize:vertical;min-height:70px;}
+    textarea.modal-input:focus{outline:none;border-color:var(--a3);}
+    .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:20px;}
+    .btn-cancel{background:none;border:1px solid #ffffff20;color:#ffffff60;padding:9px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;}
+    .btn-save{background:var(--a1);border:none;color:#07070f;padding:9px 20px;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;font-weight:700;}
+    .btn-save:disabled{opacity:.5;cursor:not-allowed;}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-left">
+      <button class="back-btn" onclick="window.location.href='escritorio.html'">← Escritorio</button>
+      <div class="logo">♻️ Reacondicionados</div>
+    </div>
+    <div class="user-info">
+      <span class="user-name" id="userName">Cargando...</span>
+      <button class="btn-logout" onclick="logout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="main">
+    <h1>Piezas retiradas</h1>
+    <p class="subtitle">Componentes pendientes de revisión o reacondicionamiento</p>
+
+    <div class="toolbar">
+      <div class="filter-tabs">
+        <button class="tab active" onclick="setFiltro('todos',this)">Todos <span class="count-badge" id="cTodos">0</span></button>
+        <button class="tab" onclick="setFiltro('pendiente',this)">Pendientes <span class="count-badge" id="cPendiente">0</span></button>
+        <button class="tab" onclick="setFiltro('revisando',this)">Revisando <span class="count-badge" id="cRevisando">0</span></button>
+        <button class="tab" onclick="setFiltro('reparado',this)">Reparados <span class="count-badge" id="cReparado">0</span></button>
+        <button class="tab" onclick="setFiltro('descartado',this)">Descartados <span class="count-badge" id="cDescartado">0</span></button>
+      </div>
+      <input class="search-input" type="text" id="searchInput" placeholder="Buscar equipo, error…" oninput="renderLista()">
+    </div>
+
+    <div class="card-grid" id="lista">
+      <div class="loading">Cargando piezas…</div>
+    </div>
+  </div>
+
+  <!-- Modal actualizar -->
+  <div class="modal-bg" id="modalBg" onclick="if(event.target===this)cerrarModal()">
+    <div class="modal">
+      <div class="modal-title" id="modalTitle">Actualizar pieza</div>
+      <div class="modal-field">
+        <div class="modal-label">Equipo</div>
+        <div class="modal-value" id="mEquipo">—</div>
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Error detectado</div>
+        <div class="modal-value" id="mError">—</div>
+      </div>
+      <div class="modal-field">
+        <div class="modal-label">Notas (opcional)</div>
+        <textarea class="modal-input" id="mNotas" placeholder="Añadir observaciones…"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn-save" id="btnConfirmar" onclick="confirmarAccion()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const SUPA_URL = 'https://raoxkjnwrccoxjcipfpv.supabase.co';
+    const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhb3hram53cmNjb3hqY2lwZnB2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyMzMxNzgsImV4cCI6MjA5MTgwOTE3OH0.dlPG4hpA-ypmGkqrP0ohaiOfMtXq5dpVmV7QNOt7_Qs';
+    var supabase = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    const irc = () => supabase;
+
+    let items = [];
+    let filtroActual = 'todos';
+    let accionPendiente = null; // { id, nuevoEstado }
+
+    document.getElementById('userName').textContent = localStorage.getItem('irc_user_nombre') || 'Usuario';
+
+    function logout() {
+      supabase.auth.signOut();
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+
+    async function cargar() {
+      const { data, error } = await irc()
+        .from('reacondicionados')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) { showToast('Error al cargar: ' + error.message, true); return; }
+      items = data || [];
+      actualizarContadores();
+      renderLista();
+    }
+
+    function actualizarContadores() {
+      document.getElementById('cTodos').textContent = items.length;
+      ['pendiente','revisando','reparado','descartado'].forEach(e => {
+        document.getElementById('c' + e.charAt(0).toUpperCase() + e.slice(1)).textContent =
+          items.filter(i => i.estado === e).length;
+      });
+    }
+
+    function setFiltro(f, btn) {
+      filtroActual = f;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderLista();
+    }
+
+    function renderLista() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      let lista = items;
+      if (filtroActual !== 'todos') lista = lista.filter(i => i.estado === filtroActual);
+      if (q) lista = lista.filter(i =>
+        (i.retirado_de||'').toLowerCase().includes(q) ||
+        (i.error_detectado||'').toLowerCase().includes(q) ||
+        (i.notas||'').toLowerCase().includes(q)
+      );
+
+      const el = document.getElementById('lista');
+      if (!lista.length) {
+        el.innerHTML = `<div class="empty"><div class="empty-icon">♻️</div><div>No hay piezas${filtroActual !== 'todos' ? ' en este estado' : ''}</div></div>`;
+        return;
+      }
+
+      el.innerHTML = lista.map(item => {
+        const iconos = { pendiente:'⏳', revisando:'🔍', reparado:'✅', descartado:'🗑️' };
+        const icon = iconos[item.estado] || '♻️';
+        const fecha = item.created_at ? new Date(item.created_at).toLocaleDateString('es-ES', {day:'2-digit',month:'short',year:'numeric'}) : '—';
+        const tecnico = item.tecnico_id ? item.tecnico_id.slice(0,8) + '…' : '—';
+
+        let acciones = '';
+        if (item.estado === 'pendiente') {
+          acciones = `
+            <button class="btn-action btn-revisar" onclick="abrirModal('${item.id}','revisando')">🔍 Revisar</button>
+            <button class="btn-action btn-descartar" onclick="abrirModal('${item.id}','descartado')">🗑️ Descartar</button>`;
+        } else if (item.estado === 'revisando') {
+          acciones = `
+            <button class="btn-action btn-reparado" onclick="abrirModal('${item.id}','reparado')">✅ Reparado</button>
+            <button class="btn-action btn-descartar" onclick="abrirModal('${item.id}','descartado')">🗑️ Descartar</button>
+            <button class="btn-action btn-revertir" onclick="cambiarEstadoDirecto('${item.id}','pendiente')">↩ Pendiente</button>`;
+        } else {
+          acciones = `<button class="btn-action btn-revertir" onclick="cambiarEstadoDirecto('${item.id}','pendiente')">↩ Reabrir</button>`;
+        }
+
+        return `
+        <div class="card">
+          <div class="card-icon">${icon}</div>
+          <div class="card-body">
+            <div class="card-top">
+              <span class="card-id">${item.id || '—'}</span>
+              <span class="card-equipo">${item.retirado_de || 'Equipo desconocido'}</span>
+              <span class="estado-badge estado-${item.estado}">${item.estado}</span>
+            </div>
+            <div class="card-meta">
+              <span>📅 ${fecha}</span>
+              <span>👤 ${tecnico}</span>
+            </div>
+            ${item.error_detectado ? `<div class="card-error">⚠️ ${item.error_detectado}</div>` : ''}
+            ${item.notas ? `<div class="card-notas">📝 ${item.notas}</div>` : ''}
+          </div>
+          <div class="card-actions">${acciones}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function abrirModal(id, nuevoEstado) {
+      const item = items.find(i => i.id === id);
+      if (!item) return;
+      accionPendiente = { id, nuevoEstado };
+      document.getElementById('modalTitle').textContent =
+        nuevoEstado === 'revisando' ? '🔍 Marcar como en revisión' :
+        nuevoEstado === 'reparado' ? '✅ Marcar como reparado' : '🗑️ Descartar pieza';
+      document.getElementById('mEquipo').textContent = item.retirado_de || '—';
+      document.getElementById('mError').textContent = item.error_detectado || '—';
+      document.getElementById('mNotas').value = '';
+      document.getElementById('modalBg').classList.add('open');
+      document.getElementById('mNotas').focus();
+    }
+
+    function cerrarModal() {
+      document.getElementById('modalBg').classList.remove('open');
+      accionPendiente = null;
+    }
+
+    async function confirmarAccion() {
+      if (!accionPendiente) return;
+      const btn = document.getElementById('btnConfirmar');
+      btn.disabled = true; btn.textContent = 'Guardando…';
+      const notas = document.getElementById('mNotas').value.trim();
+      const upd = { estado: accionPendiente.nuevoEstado };
+      if (notas) upd.notas = notas;
+
+      const { error } = await irc()
+        .from('reacondicionados')
+        .update(upd)
+        .eq('id', accionPendiente.id);
+
+      btn.disabled = false; btn.textContent = 'Confirmar';
+      if (error) { showToast('Error: ' + error.message, true); return; }
+
+      // Log historial
+      const userId = localStorage.getItem('irc_user_id');
+      await irc().from('historial').insert({
+        tipo: 'reacondicionado_actualizado',
+        usuario_id: userId,
+        entidad_tipo: 'reacondicionado',
+        entidad_id: accionPendiente.id,
+        detalles: { nuevo_estado: accionPendiente.nuevoEstado, notas: notas || null }
+      });
+
+      showToast('✓ Estado actualizado');
+      cerrarModal();
+      cargar();
+    }
+
+    async function cambiarEstadoDirecto(id, nuevoEstado) {
+      const { error } = await irc()
+        .from('reacondicionados')
+        .update({ estado: nuevoEstado })
+        .eq('id', id);
+      if (error) { showToast('Error: ' + error.message, true); return; }
+      showToast('✓ Revertido a ' + nuevoEstado);
+      cargar();
+    }
+
+    function showToast(msg, err = false) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show ' + (err ? 'err' : 'ok');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    cargar();
+  </script>
+</body>
+</html>
