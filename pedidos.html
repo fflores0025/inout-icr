@@ -158,7 +158,7 @@
 
       <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;" id="modalBadges"></div>
 
-      <div style="font-size:12px; opacity:0.4; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px;">
+     <div id="modalItemsLabel" style="font-size:12px; opacity:0.4; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px;">
         Materiales — marca los recibidos
       </div>
       <div class="modal-items" id="modalItems"></div>
@@ -312,6 +312,11 @@
         document.getElementById('modalNotasWrap').style.display = 'none';
       }
 
+      // Cambiar label si está cerrado
+const cerrado = ['cancelado', 'entregado'].includes(p.estado);
+document.getElementById('modalItemsLabel').textContent = 
+  cerrado ? 'Materiales del pedido' : 'Materiales — marca los recibidos';
+      
       renderModalItems();
 
       // Acciones
